@@ -1,0 +1,34 @@
+<ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">Create Student Account</h1>
+        <button class="button button-clear button-primary" ng-click="modal1.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <div class="list">
+            <label class="item item-input">
+                <span class="input-label">Search School</span>
+                <input type="search" placeholder="School name" ng-change="search()" ng-model="data.search">
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Select School
+                </div>
+                <select ng-options="select.name for select in data.list" ng-model="user.sid" ng-change="update(user.sid)">
+                </select>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">School Email</span>
+                <input ng-model="user.schoolemail" ng-value="selected.domain" type="email">{{selected.domain}}
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Campus</span>
+                <input ng-model="user.campus" type="text">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Display Name</span>
+                <input ng-model="user.displayname" type="text">
+            </label>
+            <button class="button button-full button-positive" ng-click="createStudent(user)">Create</button>
+        </div>
+    </ion-content>
+</ion-modal-view>

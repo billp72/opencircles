@@ -1,0 +1,15 @@
+<ion-view view-title="Questions">
+    <ion-content>
+        <ion-list ng-show="rooms">
+            <ion-item class="item-icon-left" ng-repeat="room in rooms" type="item-text-wrap" ng-click="openChatRoom(room.schoolid, room.questionId, room.question)">
+                <i class="icon {{room.icon}}"></i>
+                <h2 ng-class="{'started-conversation': room.conversationStarted=='true'}">{{room.question}}</h2>
+            </ion-item>
+        </ion-list>
+        <ion-list ng-hide="rooms.length">
+            <ion-item class="textCenter">
+                <i class="icon ion-loading-c"></i> Loading Rooms
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

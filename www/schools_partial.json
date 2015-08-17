@@ -1,0 +1,5 @@
+[
+ {"web_page": "http://www.cuny.edu/", "country": "USA", "domain": "cuny.edu", "name": "Cuny University"},
+ {"web_page": "http://www.nyu.edu/", "country": "USA", "domain": "nyu.edu", "name": "New York University"},
+ {"web_page": "http://www.ntd.edu/", "country": "USA", "domain": "ntd.edu", "name": "N T College"}
+]

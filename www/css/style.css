@@ -1,0 +1,76 @@
+.logo {
+    display: block;
+    position: relative;
+    width: 60%;
+    margin: 0 auto;
+}
+.logoText {
+    text-align: center;
+    font-size: 28px;
+    font-family: Verdana, Geneva, sans-seriff;
+    color: #fafafa;
+    margin-top: 10px;
+}
+.item-note {
+    font-size: 10px;
+    margin-top: -22px;
+    margin-right: -35px;
+}
+.textCenter {
+    text-align: center;
+}
+#comment-textarea{
+    background-color: lightyellow;
+    height:200px;
+}
+.started-conversation {
+    color:blue;
+    font-weight: 900;
+}
+.special-text{
+    color: #FF00FF;
+}
+.bgcolor{
+    background-color: #387ef5;
+}
+.sign-up{
+    color: #fafafa;
+    margin-bottom: 5px;
+}
+input.input-bg{
+    background-color: #fafafa;
+}
+label.input-bg{
+    background-color: #fafafa;
+}
+p.space{
+    margin: 10px 0 10px 0;
+}
+#chatBubbles.allbubbles{
+   margin-top: 5px;
+   border:1px solid #bdbdbd;
+}
+#chatBubbles { 
+    float:right;
+    clear:both;
+ }
+#chatBubbles:nth-child(2n) { 
+    float:left;
+    clear:both;
+ }
+#chatBubbles:nth-child(3n) { 
+    float:right;
+    clear:both;
+}
+#chatBubbles:nth-child(5n) { 
+    float:left;
+    clear:both;
+}
+
+.advisors{
+    color:red;
+}
+pre{
+    font-family: arial sans-seriff;
+    font-size: .95em;
+}

@@ -1,0 +1,16 @@
+<ion-view view-title="Questions">
+    <ion-content>
+        <ion-list ng-show="rooms" class="display-text">
+            <ion-item class="item-icon-left" ng-repeat="room in rooms" ng-if="!room.conversation" type="item-text-wrap" ng-click="openChatRoom(room.schoolid, room.$id, room.userid, room.question)">
+                <i class="icon {{room.icon}}"></i>
+                <h2>{{room.question}}</h2>
+            </ion-item>
+        </ion-list>
+        <div class="msg"></div>
+        <ion-list ng-hide="rooms.length">
+            <ion-item class="textCenter">
+                <i class="icon ion-loading-c"></i> Loading Rooms
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
