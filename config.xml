@@ -4,7 +4,7 @@
   <allow-navigation href="http://*/*" />
   <allow-navigation href="https://*/*" />
   <allow-navigation href="data:*" />
-  <name>OpenCircles</name>
+  <name>Open Circles</name>
   <description>&#xD;
         An Ionic Framework and Cordova project.&#xD;
     </description>
