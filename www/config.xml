@@ -62,7 +62,7 @@
     <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.vibration" />
-    <gap:plugin name="com.ionic.keyboard.IonicKeyboard" />
+    <gap:plugin name="com.ionic.keyboard" version="1.0.3" />
   
 
     <!-- Third party plugins -->
