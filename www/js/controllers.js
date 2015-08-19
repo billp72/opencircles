@@ -66,9 +66,9 @@ angular.module('mychat.controllers', [])
                 }
             } else {
                 alert("Password reset. Email sent successfully!");
-                //$scope.modal2.hide();
-                //$scope.modal2.remove();
-                //$state.go('login');
+                $scope.modal2.hide();
+                $scope.modal2.remove();
+                $state.go('login');
             }
         });
     }
@@ -80,16 +80,16 @@ angular.module('mychat.controllers', [])
                 if (error) {
                     switch (error.code) {
                         case "INVALID_USER":
-                            $scope.errors = "The specified user account does not exist.";
+                            alert("The specified user account does not exist.");
                             break;
                         default:
-                            $scope.errors = "Error:" + error;
+                            alert("Error:" + error);
                         }
                 } else {
-                    $scope.errors = "An email to your student account has been sent!";
-                    //$scope.modal3.hide();
-                   // $scope.modal3.remove();
-                    //$state.go('login');
+                    alert("An email to your student account has been sent!");
+                    $scope.modal3.hide();
+                    $scope.modal3.remove();
+                    $state.go('login');
                 }
             });
     }
