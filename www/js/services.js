@@ -66,6 +66,7 @@ angular.module('mychat.services', ['firebase'])
         getSelectedRoomName: function () {
             var selectedRoom;
             if (selectedRoomId && selectedRoomId != null) {
+                console.log(selectedRoomId, "selected room id");
                 selectedRoom = Rooms.get(selectedRoomId);
                 if (selectedRoom)
                     return selectedRoom.schoolname;
@@ -75,8 +76,8 @@ angular.module('mychat.services', ['firebase'])
                 return null;
         },
         selectRoom: function (roomId, questionsId) {
-            console.log("selecting the room with id: " + roomId);
             selectedRoomId = roomId;
+            console.log(selectedRoomId, "selectedRoomId")
             if (isNaN(roomId)) {
                 chats = $firebase(ref.child('schools').child(selectedRoomId).child('questions').child(questionsId).child('conversation')).$asArray();
     
@@ -177,6 +178,9 @@ angular.module('mychat.services', ['firebase'])
         },
         getRef: function (){
             return ref;
+        },
+        storeIDS: function (id, key){
+            $window.localStorage.setItem(key, JSON.stringify(id));
         }
     }
 })
@@ -188,6 +192,35 @@ angular.module('mychat.services', ['firebase'])
             return id.replace(/\./g,'');
         }
     }
+})
+/*change password*/
+.factory('ChangePassword', function(){
+    var ref = new Firebase(firebaseUrl);
+    return {
+
+        change: function (user){
+                ref.changePassword({
+                    email: user.schoolemail,
+                    oldPassword: user.oldPassword,
+                    newPassword: user.newPassword
+                }, function(error) {
+                    if (error) {
+                        switch (error.code) {
+                            case "INVALID_PASSWORD":
+                                alert("The specified user account password is incorrect.");
+                                break;
+                            case "INVALID_USER":
+                                alert("The specified user account does not exist.");
+                                break;
+                            default:
+                                alert("Error changing password:", error);
+                        }
+                    } else {
+                        alert("User password changed successfully!");
+                    }
+                });
+            }
+        }
 })
 /*
 * autocomplete search
@@ -304,4 +337,23 @@ angular.module('mychat.services', ['firebase'])
             return data;
         }
     }
-});
+})
+/* check user agent for chrome or safari*/
+.service('Browser', ['$window', function($window) {
+
+     return function() {
+
+         var userAgent = $window.navigator.userAgent;
+
+        var browsers = {chrome: /chrome/i, safari: /safari/i, firefox: /firefox/i, ie: /internet explorer/i};
+
+        for(var key in browsers) {
+            if (browsers[key].test(userAgent)) {
+                return key;
+            }
+       };
+
+       return 'unknown';
+    }
+
+}]);

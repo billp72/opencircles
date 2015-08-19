@@ -1,6 +1,6 @@
 angular.module('mychat.controllers', [])
 
-.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, $timeout, Rooms, $ionicLoading, $rootScope, SchoolDataService, schoolFormDataService, stripDot) {
+.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, $timeout, Rooms, Users, $ionicLoading, $rootScope, SchoolDataService, schoolFormDataService, stripDot) {
     //console.log('Login Controller Initialized');
 
     var ref = new Firebase($scope.firebaseUrl);
@@ -53,20 +53,19 @@ angular.module('mychat.controllers', [])
         });
     }
     $scope.forgotPassReset = function(enter){
-
         ref.resetPassword({
             email: enter.email
         }, function(error) {
             if (error) {
                 switch (error.code) {
                     case "INVALID_USER":
-                        $scope.erros = "The specified user account does not exist.";
+                        alert("The specified user account does not exist.");
                         break;
                     default:
-                        $scope.errors = "Error resetting password:" + error;
+                        alert("Error resetting password:" + error);
                 }
             } else {
-                $scope.errors = "Password reset. Email sent successfully!";
+                alert("Password reset. Email sent successfully!");
                 //$scope.modal2.hide();
                 //$scope.modal2.remove();
                 //$state.go('login');
@@ -196,9 +195,18 @@ angular.module('mychat.controllers', [])
                 console.log("Logged in as:" + authData.uid);
                 ref.child("users").child(authData.uid+'/user').once('value', function (snapshot) {
                     var val = snapshot.val();
+                    if(!!val.schoolId){
+                        $rootScope.student   = true;
+                        $rootScope.hsStudent = false;
+                        Users.storeIDS(true, 'student');
+                        Users.storeIDS(false, 'hsStudent');
+                    }else{
+                        $rootScope.hsStudent = true;
+                        $rootScope.student   = false;
+                        Users.storeIDS(true, 'hsStudent');
+                        Users.storeIDS(false, 'student');
 
-                    $rootScope.student =  !!val.schoolId ? true : false;
-                    $rootScope.hsStudent = !val.schoolId ? true : false;
+                    }
 
                     $timeout( function(){
                         $scope.$apply(function () {
@@ -206,6 +214,10 @@ angular.module('mychat.controllers', [])
                             //$rootScope.campus = !!val.campus ? val.campus : 'main';
                             $rootScope.userID = authData.uid;
                             $rootScope.schoolid = !!val.schoolId ? val.schoolId : null;
+                            Users.storeIDS(authData.uid, 'userID');
+                            Users.storeIDS($rootScope.schoolid, 'schoolID');
+                            Users.storeIDS(val.displayName, 'displayName');
+
                         });
                     }, 100);
                     
@@ -231,20 +243,26 @@ angular.module('mychat.controllers', [])
 })
 .controller('ChatCtrl', function ($scope, Chats, Users, $state, $window, $ionicLoading, $ionicModal) {
     //console.log("Chat Controller initialized");
+    if(!$scope.schoolid){
+        $scope.schoolid = Users.getQuestionIDS('schoolID');
+    }
+    if(!$scope.displayName){
+        $scope.displayName = Users.getQuestionIDS('displayName');
+    }
     $scope.IM = {
         textMessage: ""
     };
     //$scope.students = [];
-    var qid = $state.params.questionID;
-    var sid = $state.params.schoolid;
-    var ursid = $state.params.userID;
-    var indicatorToggle = $state.params.indicatorToggle;
+    var qid = $state.params.questionID,
+        sid = $state.params.schoolid,
+        ursid = $state.params.userID,
+        indicatorToggle = $state.params.indicatorToggle;
     $scope.question = $state.params.question;
 
     Chats.selectRoom(sid, qid);
 
     var roomName = Chats.getSelectedRoomName();
-    
+
     /*$scope.users = Users.all();
 
     $scope.users.$loaded(function(data){
@@ -297,7 +315,7 @@ angular.module('mychat.controllers', [])
 
 })
 
-.controller('SettingsCtrl', function ($scope, Users, $state, $ionicLoading, $ionicModal, Auth) {
+.controller('SettingsCtrl', function ($scope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth) {
     console.log('settings initialized');
 
     $scope.deleteAccount = function(){
@@ -316,36 +334,18 @@ angular.module('mychat.controllers', [])
             });
             $scope = $scope.$new(true);
             Auth.$unauth();
-        }
+    }
        
     $scope.runChangePassword = function(user){
-            var ref = new Firebase($rootScope.firebaseUrl);
-                ref.changePassword({
-                    email: user.schoolemail,
-                    oldPassword: user.oldPassword,
-                    newPassword: user.newPassword
-                }, function(error) {
-                    if (error) {
-                        switch (error.code) {
-                            case "INVALID_PASSWORD":
-                                $scope.errors = "The specified user account password is incorrect.";
-                                break;
-                            case "INVALID_USER":
-                                $scope.errors = "The specified user account does not exist.";
-                                break;
-                            default:
-                                $scope.errors = "Error changing password:", error;
-                        }
-                    } else {
-
-                        $scope.errors = "User password changed successfully!";
-                    }
-                });
-        }
+            ChangePassword.change(user);
+    }
 })
 
 .controller('RoomsCtrl', function ($scope, Users, $state) {
     console.log("Rooms Controller initialized");
+    if(!$scope.userID){
+        $scope.userID = Users.getQuestionIDS('userID');
+    }
 
     var q = Users.getUserById($scope.userID);
     q.$loaded(function(data){
@@ -366,6 +366,9 @@ angular.module('mychat.controllers', [])
 })
 .controller('StudentCtrl', function ($scope, $rootScope, Users, Chats, Rooms, $state, $window) {
     console.log("Student Controller initialized");
+    if(!$scope.userID){
+        $scope.userID = Users.getQuestionIDS('userID');
+    }
     $scope.ctrl = "ctrl1";
     $scope.school = Rooms.getSchoolBySid($state.params.schoolid);
     $scope.school.$loaded(function(data){
@@ -386,8 +389,14 @@ angular.module('mychat.controllers', [])
 })
 .controller('StudentConversCtrl', function ($scope, $rootScope, Users, Chats, Rooms, $state, $window) {
     console.log("Student convers Controller initialized");
+    if(!$scope.userID){
+        $scope.userID = Users.getQuestionIDS('userID');
+    }
+    if(!$scope.schoolid){
+        $scope.schoolid = Users.getQuestionIDS('schoolID');
+    }
     $scope.ctrl = "ctrl2";
-    $scope.school = Rooms.getSchoolBySid($rootScope.schoolid);
+    $scope.school = Rooms.getSchoolBySid($scope.schoolid);
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
      });
@@ -404,7 +413,12 @@ angular.module('mychat.controllers', [])
         });
     }
 })
-.controller('AskCtrl', function($scope, Users, $state, Rooms, SchoolDataService, stripDot, $ionicLoading){
+.controller('AskCtrl', function($scope, $state, Users, Rooms, SchoolDataService, stripDot, $ionicLoading){
+    var icon='';
+    if(!$scope.userID){
+        $scope.userID = Users.getQuestionIDS('userID');
+    }
+
     $scope.user = {}
     $scope.data = { 'list' : '', 'search' : ''};
 
@@ -426,13 +440,12 @@ angular.module('mychat.controllers', [])
                 template: 'Sending...'
          });
          Rooms.addQuestionsToSchool(quest.sid.schoolId, $scope.userID, quest.question, $scope, 'ion-chatbubbles').then(function(data){
-
-                Users.storeQuestionIDS(data.path.u[data.path.u.length-1]);
+                //Users.storeQuestionIDS(data.key, 'questions');
                 Users.addQuestionToUser(quest.sid.schoolId, 
                     $scope.userID, 
                     quest.question,
                     'ion-chatbubbles',
-                    data.path.u[data.path.u.length-1]
+                    data.key()
                 ).then(function(){
                     $ionicLoading.hide();
                     $state.go('menu.tab.newest');

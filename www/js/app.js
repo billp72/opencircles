@@ -27,7 +27,9 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
 .run(function ($ionicPlatform, $rootScope, $location, $state, Auth, $ionicLoading, $ionicModal, $window) {
 
     $ionicPlatform.ready(function () {
-
+        $rootScope.student   =  JSON.parse($window.localStorage.getItem('student'));
+        $rootScope.hsStudent =  JSON.parse($window.localStorage.getItem('hsStudent'));
+        console.log($rootScope.hsStudent);
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -76,6 +78,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
 
 .config(function ($stateProvider, $urlRouterProvider) {
     console.log("setting config");
+
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
     // Set up the various states which the app can be in.
