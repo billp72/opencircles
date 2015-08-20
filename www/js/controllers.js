@@ -1,6 +1,6 @@
 angular.module('mychat.controllers', [])
 
-.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, $timeout, Rooms, Users, $ionicLoading, $rootScope, SchoolDataService, schoolFormDataService, stripDot) {
+.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, Rooms, Users, $ionicLoading, $rootScope, SchoolDataService, schoolFormDataService, stripDot) {
     //console.log('Login Controller Initialized');
 
     var ref = new Firebase($scope.firebaseUrl);
@@ -195,32 +195,31 @@ angular.module('mychat.controllers', [])
                 console.log("Logged in as:" + authData.uid);
                 ref.child("users").child(authData.uid+'/user').once('value', function (snapshot) {
                     var val = snapshot.val();
+    
                     if(!!val.schoolId){
                         $rootScope.student   = true;
                         $rootScope.hsStudent = false;
+                        $rootScope.schoolID  = val.schoolId;
+                        //persist data
                         Users.storeIDS(true, 'student');
                         Users.storeIDS(false, 'hsStudent');
+                        Users.storeIDS(val.schoolId, 'schoolID');
                     }else{
                         $rootScope.hsStudent = true;
                         $rootScope.student   = false;
+                        $rootScope.schoolid  = '';
+                        //persist data
                         Users.storeIDS(true, 'hsStudent');
                         Users.storeIDS(false, 'student');
+                        Users.removeItem('schoolID');
 
                     }
-
-                    $timeout( function(){
-                        $scope.$apply(function () {
-                            $rootScope.displayName = val.displayName;
-                            //$rootScope.campus = !!val.campus ? val.campus : 'main';
-                            $rootScope.userID = authData.uid;
-                            $rootScope.schoolid = !!val.schoolId ? val.schoolId : null;
-                            Users.storeIDS(authData.uid, 'userID');
-                            Users.storeIDS($rootScope.schoolid, 'schoolID');
-                            Users.storeIDS(val.displayName, 'displayName');
-
-                        });
-                    }, 100);
-                    
+                    $rootScope.userID = authData.uid;
+                    $rootScope.displayName = val.displayName;
+                    //persist data
+                    Users.storeIDS(authData.uid, 'userID');
+                    Users.storeIDS(val.displayName, 'displayName');
+                
                     $ionicLoading.hide();
                     if(!!val.schoolId){
                         $state.go('menu.tab.student', {
@@ -243,8 +242,8 @@ angular.module('mychat.controllers', [])
 })
 .controller('ChatCtrl', function ($scope, $rootScope, Chats, Users, $state, $window, $ionicLoading, $ionicModal) {
     //console.log("Chat Controller initialized");
-    if(!$scope.schoolid){
-        $scope.schoolid = Users.getQuestionIDS('schoolID');
+    if(!$scope.schoolID){
+        $scope.schoolID = Users.getQuestionIDS('schoolID');
     }
     if(!$scope.displayName){
         $scope.displayName = Users.getQuestionIDS('displayName');
@@ -278,10 +277,10 @@ angular.module('mychat.controllers', [])
        if(typeof val === "string"){
            console.log(val);
        }else{
-            if(!!$scope.schoolid){
+            if(!!$scope.schoolID){
                 $scope.modal.hide();
                 $state.go('menu.tab.student', {
-                    schoolid: $scope.schoolid
+                    schoolid: $scope.schoolID
                 });
             }else{
                  $scope.modal.hide();
@@ -309,7 +308,7 @@ angular.module('mychat.controllers', [])
     }
 
     $scope.sendMessage = function (msg) {
-        Chats.send($scope.displayName, $scope.schoolid, msg, qid, sid, ursid, indicatorToggle);
+        Chats.send($scope.displayName, $scope.schoolID, msg, qid, sid, ursid, indicatorToggle);
         $scope.IM.textMessage = "";
     }
 
@@ -345,7 +344,7 @@ angular.module('mychat.controllers', [])
             $ionicLoading.show({
                 template: 'Logging Out...'
             });
-            $scope = $scope.$new(true);
+            //$scope = $scope.$new(true);
             Auth.$unauth();
     }
        
@@ -405,11 +404,11 @@ angular.module('mychat.controllers', [])
     if(!$scope.userID){
         $scope.userID = Users.getQuestionIDS('userID');
     }
-    if(!$scope.schoolid){
-        $scope.schoolid = Users.getQuestionIDS('schoolID');
+    if(!$scope.schoolID){
+        $scope.schoolID = Users.getQuestionIDS('schoolID');
     }
     $scope.ctrl = "ctrl2";
-    $scope.school = Rooms.getSchoolBySid($scope.schoolid);
+    $scope.school = Rooms.getSchoolBySid($scope.schoolID);
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
      });

@@ -9,7 +9,6 @@ angular.module('mychat.services', ['firebase'])
 .factory('Chats', function ($rootScope, $firebase, $state, Rooms, Users) {
 
     var selectedRoomId;
-    var conversationID = [];
     var ref = new Firebase(firebaseUrl);
     var chats;
 
@@ -162,13 +161,6 @@ angular.module('mychat.services', ['firebase'])
             var user = this.getUserById(id);
             return user.$add({schoolid: schoolid, question: question, icon: icon, questionId: questionId});
         },
-        storeQuestionIDS: function (id, key){
-            qid.push(id);
-             if(qid.length > 0){
-                        $window.localStorage.setItem(key,
-                            JSON.stringify(qid));
-                }
-        },
         getQuestionIDS: function (key){
             return JSON.parse($window.localStorage.getItem(key));
         },
@@ -177,6 +169,9 @@ angular.module('mychat.services', ['firebase'])
         },
         storeIDS: function (id, key){
             $window.localStorage.setItem(key, JSON.stringify(id));
+        },
+        removeItem: function (key){
+            $window.localStorage.removeItem(key);
         }
     }
 })
