@@ -241,7 +241,7 @@ angular.module('mychat.controllers', [])
     }
     
 })
-.controller('ChatCtrl', function ($scope, Chats, Users, $state, $window, $ionicLoading, $ionicModal) {
+.controller('ChatCtrl', function ($scope, $rootScope, Chats, Users, $state, $window, $ionicLoading, $ionicModal) {
     //console.log("Chat Controller initialized");
     if(!$scope.schoolid){
         $scope.schoolid = Users.getQuestionIDS('schoolID');
@@ -293,6 +293,19 @@ angular.module('mychat.controllers', [])
     if (roomName) {
         $scope.roomName = " - " + roomName;
         $scope.chats = Chats.all($scope.displayName);
+            $rootScope.$on('message.sent', function (event, value){
+                $scope.usersName = value;
+            })
+            $scope.$watch('chats', function(newValue, oldValue){
+                if(newValue){
+                    if(!!$scope.usersName){
+                        if($scope.usersName !== $scope.displayName){
+                            navigator.notification.vibrate(500);
+                        }
+                    }
+                }
+            },true);
+            
     }
 
     $scope.sendMessage = function (msg) {
@@ -436,22 +449,31 @@ angular.module('mychat.controllers', [])
 
     }
     $scope.ask = function (quest){
-         $ionicLoading.show({
-                template: 'Sending...'
-         });
-         Rooms.addQuestionsToSchool(quest.sid.schoolId, $scope.userID, quest.question, $scope, 'ion-chatbubbles').then(function(data){
-                //Users.storeQuestionIDS(data.key, 'questions');
-                Users.addQuestionToUser(quest.sid.schoolId, 
-                    $scope.userID, 
-                    quest.question,
-                    'ion-chatbubbles',
-                    data.key()
-                ).then(function(){
-                    $ionicLoading.hide();
-                    $state.go('menu.tab.newest');
-                    $scope.data.search = '';
-                    $scope.user.question = '';
-             });
-        })
+
+        var chars = !!quest.question ? quest.question.split('') : undefined
+            if(!!quest.sid){
+                if(chars && chars.length >= 15){
+                    $ionicLoading.show({
+                        template: 'Sending...'
+                    });
+                    Rooms.addQuestionsToSchool(quest.sid.schoolId, $scope.userID, quest.question, $scope, 'ion-chatbubbles').then(function(data){
+                        Users.addQuestionToUser(quest.sid.schoolId, 
+                            $scope.userID, 
+                            quest.question,
+                            'ion-chatbubbles',
+                            data.key()
+                        ).then(function(){
+                            $ionicLoading.hide();
+                            $state.go('menu.tab.newest');
+                            $scope.data.search = '';
+                            $scope.user.question = '';
+                        });
+                    })
+                }else{
+                    alert('questions must be at least 15 characters long');
+                }
+            }else{
+                alert('please select a school');
+            }
     }
 });

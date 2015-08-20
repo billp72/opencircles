@@ -66,7 +66,6 @@ angular.module('mychat.services', ['firebase'])
         getSelectedRoomName: function () {
             var selectedRoom;
             if (selectedRoomId && selectedRoomId != null) {
-                console.log(selectedRoomId, "selected room id");
                 selectedRoom = Rooms.get(selectedRoomId);
                 if (selectedRoom)
                     return selectedRoom.schoolname;
@@ -77,7 +76,6 @@ angular.module('mychat.services', ['firebase'])
         },
         selectRoom: function (roomId, questionsId) {
             selectedRoomId = roomId;
-            console.log(selectedRoomId, "selectedRoomId")
             if (isNaN(roomId)) {
                 chats = $firebase(ref.child('schools').child(selectedRoomId).child('questions').child(questionsId).child('conversation')).$asArray();
     
@@ -87,6 +85,7 @@ angular.module('mychat.services', ['firebase'])
             //console.log("sending message from :" + from.displayName + " & message is " + message);
             
             if (from && message) {
+                $rootScope.$emit('message.sent', from);
                 var chatMessage = {
                     from: from,
                     message: message,
@@ -95,9 +94,6 @@ angular.module('mychat.services', ['firebase'])
                 };
                  chats.$add(chatMessage).then(function (data) {
                         if(!!ursid){
-                            //if(from !== $rootScope.displayName){
-                                navigator.notification.vibrate(500);
-                           // }
                            ref.child('users').child(ursid).child('questions').
                               orderByChild('questionId').
                                  equalTo(questionsId).on('child_added', function(snapshot){
@@ -339,7 +335,7 @@ angular.module('mychat.services', ['firebase'])
     }
 })
 /* check user agent for chrome or safari*/
-.service('Browser', ['$window', function($window) {
+/*.service('Browser', ['$window', function($window) {
 
      return function() {
 
@@ -356,4 +352,4 @@ angular.module('mychat.services', ['firebase'])
        return 'unknown';
     }
 
-}]);
+}]);*/

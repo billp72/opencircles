@@ -46,29 +46,8 @@ label.input-bg{
 p.space{
     margin: 10px 0 10px 0;
 }
-#chatBubbles.allbubbles{
-   margin-top: 5px;
-   border:1px solid #bdbdbd;
-}
-#chatBubbles { 
-    float:right;
-    clear:both;
- }
-#chatBubbles:nth-child(2n) { 
-    float:left;
-    clear:both;
- }
-#chatBubbles:nth-child(3n) { 
-    float:right;
-    clear:both;
-}
-#chatBubbles:nth-child(5n) { 
-    float:left;
-    clear:both;
-}
-
 .advisors{
-    color:red;
+    color:blue;
 }
 pre{
     font-family: arial sans-seriff;
