@@ -4,7 +4,7 @@ Each tab's child <ion-nav-view> directive will have its own
 navigation history that also transitions its views in and out.
 -->
 
-<ion-tabs ng-if="student" class="tabs-icon-top tabs-color-active-positive">
+<ion-tabs ng-if="advisor" class="tabs-icon-top tabs-color-active-positive">
  <!-- Rooms List Tab -->
     <ion-tab title="Unanswered" icon-off="ion-ios7-box-outline" icon-on="ion-ios7-box" href="#/menu/tab/studentrooms">
         <ion-nav-view name="tab-student"></ion-nav-view>
@@ -22,7 +22,7 @@ navigation history that also transitions its views in and out.
         <ion-nav-view name="tab-chat"></ion-nav-view>
     </ion-tab>
 </ion-tabs>
-<ion-tabs ng-if="hsStudent" class="tabs-icon-top tabs-color-active-positive">
+<ion-tabs ng-if="prospect" class="tabs-icon-top tabs-color-active-positive">
 <!-- ask question for hs student -->
      <ion-tab title="Ask" icon-off="ion-ios7-box-outline" icon-on="ion-ios7-box" href="#/menu/tab/ask">
         <ion-nav-view name="tab-ask"></ion-nav-view>

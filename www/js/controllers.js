@@ -197,20 +197,20 @@ angular.module('mychat.controllers', [])
                     var val = snapshot.val();
     
                     if(!!val.schoolId){
-                        $rootScope.student   = true;
-                        $rootScope.hsStudent = false;
+                        $rootScope.advisor   = true;
+                        $rootScope.prospect  = false;
                         $rootScope.schoolID  = val.schoolId;
                         //persist data
-                        Users.storeIDS(true, 'student');
-                        Users.storeIDS(false, 'hsStudent');
+                        Users.storeIDS(true, 'advisor');
+                        Users.removeItem('prospect');
                         Users.storeIDS(val.schoolId, 'schoolID');
                     }else{
-                        $rootScope.hsStudent = true;
-                        $rootScope.student   = false;
-                        $rootScope.schoolid  = '';
+                        $rootScope.prospect = true;
+                        $rootScope.advisor   = false;
+                        $rootScope.schoolID  = '';
                         //persist data
-                        Users.storeIDS(true, 'hsStudent');
-                        Users.storeIDS(false, 'student');
+                        Users.storeIDS(true, 'prospect');
+                        Users.removeItem('advisor');
                         Users.removeItem('schoolID');
 
                     }
@@ -243,10 +243,10 @@ angular.module('mychat.controllers', [])
 .controller('ChatCtrl', function ($scope, $rootScope, Chats, Users, $state, $window, $ionicLoading, $ionicModal) {
     //console.log("Chat Controller initialized");
     if(!$scope.schoolID){
-        $scope.schoolID = Users.getQuestionIDS('schoolID');
+        $scope.schoolID = Users.getIDS('schoolID');
     }
     if(!$scope.displayName){
-        $scope.displayName = Users.getQuestionIDS('displayName');
+        $scope.displayName = Users.getIDS('displayName');
     }
     $scope.IM = {
         textMessage: ""
@@ -356,7 +356,7 @@ angular.module('mychat.controllers', [])
 .controller('RoomsCtrl', function ($scope, Users, $state) {
     console.log("Rooms Controller initialized");
     if(!$scope.userID){
-        $scope.userID = Users.getQuestionIDS('userID');
+        $scope.userID = Users.getIDS('userID');
     }
 
     var q = Users.getUserById($scope.userID);
@@ -379,7 +379,7 @@ angular.module('mychat.controllers', [])
 .controller('StudentCtrl', function ($scope, $rootScope, Users, Chats, Rooms, $state, $window) {
     console.log("Student Controller initialized");
     if(!$scope.userID){
-        $scope.userID = Users.getQuestionIDS('userID');
+        $scope.userID = Users.getIDS('userID');
     }
     $scope.ctrl = "ctrl1";
     $scope.school = Rooms.getSchoolBySid($state.params.schoolid);
@@ -402,10 +402,10 @@ angular.module('mychat.controllers', [])
 .controller('StudentConversCtrl', function ($scope, $rootScope, Users, Chats, Rooms, $state, $window) {
     console.log("Student convers Controller initialized");
     if(!$scope.userID){
-        $scope.userID = Users.getQuestionIDS('userID');
+        $scope.userID = Users.getIDS('userID');
     }
     if(!$scope.schoolID){
-        $scope.schoolID = Users.getQuestionIDS('schoolID');
+        $scope.schoolID = Users.getIDS('schoolID');
     }
     $scope.ctrl = "ctrl2";
     $scope.school = Rooms.getSchoolBySid($scope.schoolID);
@@ -428,7 +428,7 @@ angular.module('mychat.controllers', [])
 .controller('AskCtrl', function($scope, $state, Users, Rooms, SchoolDataService, stripDot, $ionicLoading){
     var icon='';
     if(!$scope.userID){
-        $scope.userID = Users.getQuestionIDS('userID');
+        $scope.userID = Users.getIDS('userID');
     }
 
     $scope.user = {}

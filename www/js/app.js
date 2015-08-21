@@ -27,9 +27,10 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
 .run(function ($ionicPlatform, $rootScope, $location, $state, Auth, $ionicLoading, $ionicModal, $window) {
 
     $ionicPlatform.ready(function () {
-        $rootScope.student   =  JSON.parse($window.localStorage.getItem('student'));
-        $rootScope.hsStudent =  JSON.parse($window.localStorage.getItem('hsStudent'));
-        console.log($rootScope.hsStudent);
+        $rootScope.advisor   =  !!JSON.parse($window.localStorage.getItem('advisor')) ?
+                JSON.parse($window.localStorage.getItem('advisor')) : false;
+        $rootScope.prospect  =  !!JSON.parse($window.localStorage.getItem('prospect')) ?
+                JSON.parse($window.localStorage.getItem('prospect')) : false;
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins.Keyboard) {

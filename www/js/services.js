@@ -161,7 +161,7 @@ angular.module('mychat.services', ['firebase'])
             var user = this.getUserById(id);
             return user.$add({schoolid: schoolid, question: question, icon: icon, questionId: questionId});
         },
-        getQuestionIDS: function (key){
+        getIDS: function (key){
             return JSON.parse($window.localStorage.getItem(key));
         },
         getRef: function (){

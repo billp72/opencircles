@@ -53,18 +53,10 @@ angular.module('mychat.directives', [])
                           var temp = $compile('<ion-item class="textCenter"><i>No current questions<i></ion-item>');
                           var content = temp(scope);
                           elem.find('div').append(content);
-                      }else{
-                          var temp = $compile('');
-                          var content = temp(scope);
-                          elem.find('div').append(content);
                       }
 
                       if(contr2 && scope.ctrl === 'ctrl2'){
                           var temp = $compile('<ion-item class="textCenter"><i>No conversations<i></ion-item>');
-                          var content = temp(scope);
-                          elem.find('div').append(content);
-                      }else{
-                          var temp = $compile('');
                           var content = temp(scope);
                           elem.find('div').append(content);
                       }
