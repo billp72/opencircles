@@ -408,15 +408,15 @@ angular.module('mychat.controllers', [])
         });
     }
 })
-.controller('StudentCtrl', function ($scope, $rootScope, Users, Chats, Rooms, /*Store,*/ $state, $window) {
+.controller('StudentCtrl', function ($scope, $rootScope, Users, Chats, Rooms,/* Store,*/ $state, $window) {
     console.log("Student Controller initialized");
     if(!$scope.userID){
         $scope.userID = Users.getIDS('userID');
     }
+    var num=0;
     $scope.school = Rooms.getSchoolBySid($state.params.schoolid);
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
-          //Store.add($scope.rooms);
      });
     $scope.openChatRoom = function (schoolid, questionId, userid, question) {
 
@@ -439,10 +439,11 @@ angular.module('mychat.controllers', [])
     if(!$scope.schoolID){
         $scope.schoolID = Users.getIDS('schoolID');
     }
-    $scope.ctrl = "ctrl2";
+    var num=0;
     $scope.school = Rooms.getSchoolBySid($scope.schoolID);
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
+         
      });
    
     $scope.openChatRoom = function (schoolid, questionId, userid, question) {

@@ -106,13 +106,13 @@ angular.module('mychat.services', ['firebase'])
         }
     }
 })
-/*.factory('Store', function(){
+/*factory('Store', function(){
     if(storeArray && storeArray.length>0){
         storeArray.length = 0;
     }
     var storeArray = [],
-        answer=0;
-        console.log(answer);
+        question=0,
+        conversation=0;
     return {
         add: function (data){
             storeArray[0] = data;
@@ -120,15 +120,18 @@ angular.module('mychat.services', ['firebase'])
         getStore: function (){
             return storeArray;
         },
-        addConversation: function (num){
-            answer + num;
+        addQuestion: function (num){
+            question += num;
         },
-        deductConversation: function (num){
-            answer - num;
+        addConversation: function (num){
+            conversation += num;
+        },
+        getQuestion: function (){
+            return question;
         },
         getConversation: function (){
-            return answer;
-        },
+            return conversation;
+        }
     }
 })*/
 /**

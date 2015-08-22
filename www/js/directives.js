@@ -23,22 +23,21 @@ angular.module('mychat.directives', [])
   return {
     restrict: 'C', 
     link: function(scope, elem, attrs) {
-         /*scope.$watch('tabs', function (){
-              if(scope.tabs == 'ctrl1'){
-                  if(Store.getConversation() > 0){
-                      scope.message = 'no current questions.';
-                  }else{
-                      scope.message = '';
-                  }
-              } 
-              if(scope.tabs == 'ctrl2'){
-                  if(Store.getConversation() === 0){
-                      scope.message2 = 'no current conversations.';
-                  }else{
-                      scope.message2 = '';
-                  }
-              }
-          });*/
+  
+        scope.$watch('rooms', function (){
+            var Qnum=0,
+                Cnum=0;
+            angular.forEach(scope.rooms, function (value, key){
+                if(!value.conversation){
+                    Qnum +=1;     
+                }else{
+                    Cnum +=1;
+                }
+            });
+            scope.message = 'You have '+ Qnum + ' question(s)';
+            scope.message2 = 'You have '+ Cnum + ' conversation(s)';
+        },true);
+        
     }
   };
 }])
