@@ -1,12 +1,12 @@
 <ion-view view-title="Conversations">
     <ion-content>
-        <ion-list ng-show="rooms" class="display-text">
-            <ion-item class="item-icon-left display-text" ng-repeat="room in rooms" ng-if="room.conversation" type="item-text-wrap" ng-click="openChatRoom(room.schoolid, room.$id, room.userid, room.question)">
+        <ion-list ng-show="rooms">
+            <ion-item class="item-icon-left" ng-repeat="room in rooms" ng-if="room.conversation" type="item-text-wrap" ng-click="openChatRoom(room.schoolid, room.$id, room.userid, room.question)">
                 <i class="icon {{room.icon}}"></i>
                 <h2>{{room.question}}</h2>
             </ion-item>
         </ion-list>
-         <div class="msg"></div>
+         <!--<div class="display-text" model="message2">{{message2}}</div>-->
         <ion-list ng-hide="rooms.length">
             <ion-item class="textCenter">
                 <i class="icon ion-loading-c"></i> Loading Rooms

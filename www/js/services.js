@@ -106,6 +106,31 @@ angular.module('mychat.services', ['firebase'])
         }
     }
 })
+/*.factory('Store', function(){
+    if(storeArray && storeArray.length>0){
+        storeArray.length = 0;
+    }
+    var storeArray = [],
+        answer=0;
+        console.log(answer);
+    return {
+        add: function (data){
+            storeArray[0] = data;
+        },
+        getStore: function (){
+            return storeArray;
+        },
+        addConversation: function (num){
+            answer + num;
+        },
+        deductConversation: function (num){
+            answer - num;
+        },
+        getConversation: function (){
+            return answer;
+        },
+    }
+})*/
 /**
  * Simple Service which returns Rooms collection as Array from Salesforce & binds to the Scope in Controller
  */

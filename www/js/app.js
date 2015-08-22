@@ -122,7 +122,8 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         abstract: true,
         views: {
             'tabs': {
-                templateUrl: "templates/tabs.html"
+                templateUrl: "templates/tabs.html",
+                controller: 'TabCtrl'
             }
         }
     })

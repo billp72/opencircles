@@ -240,7 +240,7 @@ angular.module('mychat.controllers', [])
     }
     
 })
-.controller('ChatCtrl', function ($scope, $rootScope, Chats, Users, $state, $window, $ionicLoading, $ionicModal) {
+.controller('ChatCtrl', function ($scope, $rootScope, Chats, Users, /*Store,*/ $state, $window, $ionicLoading, $ionicModal) {
     //console.log("Chat Controller initialized");
     if(!$scope.schoolID){
         $scope.schoolID = Users.getIDS('schoolID');
@@ -256,7 +256,7 @@ angular.module('mychat.controllers', [])
         sid = $state.params.schoolid,
         ursid = $state.params.userID,
         indicatorToggle = $state.params.indicatorToggle;
-    $scope.question = $state.params.question;
+        $scope.question = $state.params.question;
 
     Chats.selectRoom(sid, qid);
 
@@ -274,9 +274,7 @@ angular.module('mychat.controllers', [])
     //remove conversation
     $scope.removePerm = function () {
         var val = Chats.wrapitup(sid, qid, $scope.question);
-       if(typeof val === "string"){
-           console.log(val);
-       }else{
+       if(typeof val !== "string"){
             if(!!$scope.schoolID){
                 $scope.modal.hide();
                 $state.go('menu.tab.student', {
@@ -286,6 +284,11 @@ angular.module('mychat.controllers', [])
                  $scope.modal.hide();
                  $state.go('menu.tab.ask');
             }
+            angular.forEach(Store.getStore()[0], function(value, key){
+                if(key === 'conversation'){
+                    Store.deductAnswers(1);
+                }
+            });
        }
     }
     // Fetching Chat Records only if a Room is Selected
@@ -310,10 +313,35 @@ angular.module('mychat.controllers', [])
     $scope.sendMessage = function (msg) {
         Chats.send($scope.displayName, $scope.schoolID, msg, qid, sid, ursid, indicatorToggle);
         $scope.IM.textMessage = "";
+        /*angular.forEach(Store.getStore()[0], function(value, key){
+                if(value && !value.conversation){
+                    Store.addConversation(1);
+                }
+        });*/
     }
 
-    $scope.remove = function (chat) {
+    $scope.remove = function (chat, index) {
         Chats.remove(chat);
+        /*angular.forEach(Store.getStore()[0], function(value, key){
+                if(key === 'conversation' && index == 0){
+                    Store.deductConversation(1);
+                }
+        });*/
+    }
+
+    $scope.removePerm = function () {
+        var val = Chats.wrapitup(sid, qid, $scope.question);
+       if(typeof val !== "string"){
+            if(!!$scope.schoolID){
+                $scope.modal.hide();
+                $state.go('menu.tab.student', {
+                    schoolid: $scope.schoolID
+                });
+            }else{
+                 $scope.modal.hide();
+                 $state.go('menu.tab.ask');
+            }
+       }
     }
 
     $scope.removeConversation = function (){
@@ -326,7 +354,11 @@ angular.module('mychat.controllers', [])
     }
 
 })
-
+.controller('TabCtrl', function ($scope){
+    $scope.tabSelected = function (select){
+        $scope.tabs = select;
+    }
+})
 .controller('SettingsCtrl', function ($scope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth) {
     console.log('settings initialized');
 
@@ -376,17 +408,16 @@ angular.module('mychat.controllers', [])
         });
     }
 })
-.controller('StudentCtrl', function ($scope, $rootScope, Users, Chats, Rooms, $state, $window) {
+.controller('StudentCtrl', function ($scope, $rootScope, Users, Chats, Rooms, /*Store,*/ $state, $window) {
     console.log("Student Controller initialized");
     if(!$scope.userID){
         $scope.userID = Users.getIDS('userID');
     }
-    $scope.ctrl = "ctrl1";
     $scope.school = Rooms.getSchoolBySid($state.params.schoolid);
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
+          //Store.add($scope.rooms);
      });
-   
     $scope.openChatRoom = function (schoolid, questionId, userid, question) {
 
         $state.go('menu.tab.chat', {
@@ -398,8 +429,9 @@ angular.module('mychat.controllers', [])
             question: question
         });
     }
+   
 })
-.controller('StudentConversCtrl', function ($scope, $rootScope, Users, Chats, Rooms, $state, $window) {
+.controller('StudentConversCtrl', function ($scope, $rootScope, Users, Chats, Rooms, /*Store,*/ $state, $window) {
     console.log("Student convers Controller initialized");
     if(!$scope.userID){
         $scope.userID = Users.getIDS('userID');
@@ -424,6 +456,7 @@ angular.module('mychat.controllers', [])
             question: question
         });
     }
+   
 })
 .controller('AskCtrl', function($scope, $state, Users, Rooms, SchoolDataService, stripDot, $ionicLoading){
     var icon='';

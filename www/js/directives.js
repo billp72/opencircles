@@ -18,53 +18,29 @@ angular.module('mychat.directives', [])
     }
   }; 
 })
-.directive('displayText', function($compile) {
+.directive('displayText', ['$compile' /*, 'Store'*/, function ($compile /*, Store*/) {
     
   return {
-    restrict: "C", 
-    scope: false,
+    restrict: 'C', 
     link: function(scope, elem, attrs) {
-      //var list = elem[0].getElementsByClassName('ng-hide'),
-          i=0,
-          contr1=true,
-          contr2=true;
-
-          scope.$watch('rooms', function(data){
-          
-                if(data != undefined){
-
-                  if(scope.ctrl==='ctrl1'){
-                    for(i; i<scope.rooms.length; i++){ 
-                          if(!scope.rooms[i].conversation){
-                            contr1=false;
-                          }
-                      }
-                    }
-                  if(scope.ctrl==='ctrl2'){
-                    for(i; i<scope.rooms.length; i++){ 
-                          if(!!scope.rooms[i].conversation){
-                            contr2=false;
-                          }
-                      }
-                    }
-                    if(scope.rooms.length > 0){
-
-                      if (contr1 && scope.ctrl === 'ctrl1') {
-                          var temp = $compile('<ion-item class="textCenter"><i>No current questions<i></ion-item>');
-                          var content = temp(scope);
-                          elem.find('div').append(content);
-                      }
-
-                      if(contr2 && scope.ctrl === 'ctrl2'){
-                          var temp = $compile('<ion-item class="textCenter"><i>No conversations<i></ion-item>');
-                          var content = temp(scope);
-                          elem.find('div').append(content);
-                      }
-                    }
-              }   
-  
-          });
-   
+         /*scope.$watch('tabs', function (){
+              if(scope.tabs == 'ctrl1'){
+                  if(Store.getConversation() > 0){
+                      scope.message = 'no current questions.';
+                  }else{
+                      scope.message = '';
+                  }
+              } 
+              if(scope.tabs == 'ctrl2'){
+                  if(Store.getConversation() === 0){
+                      scope.message2 = 'no current conversations.';
+                  }else{
+                      scope.message2 = '';
+                  }
+              }
+          });*/
     }
   };
-})
+}])
+
+
