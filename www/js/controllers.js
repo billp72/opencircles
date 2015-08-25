@@ -262,16 +262,6 @@ angular.module('mychat.controllers', [])
 
     var roomName = Chats.getSelectedRoomName();
 
-    /*$scope.users = Users.all();
-
-    $scope.users.$loaded(function(data){
-        for(var i=0; i<data.length; i++){
-            if(data[i].user.schoolId === sid){
-                $scope.students.push({name: data[i].user.displayName, campus:data[i].user.campus});
-            }
-        }
-    });*/
-    //remove conversation
     $scope.removePerm = function () {
         var val = Chats.wrapitup(sid, qid, $scope.question);
        if(typeof val !== "string"){
