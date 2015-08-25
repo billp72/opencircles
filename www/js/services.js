@@ -199,6 +199,10 @@ angular.module('mychat.services', ['firebase'])
            /* question.$remove(questionID).then(function (){
                 //do stuff here
             });*/
+       },
+       toggleQuestionBackAfterClick: function (toggleUserID, toggleQuestionID, indicatorToggle){
+             ref.child(toggleUserID).child('questions').child(toggleQuestionID)
+                        .update({'conversationStarted':indicatorToggle});
        }
     }
 })

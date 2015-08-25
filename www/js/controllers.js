@@ -387,7 +387,7 @@ angular.module('mychat.controllers', [])
                 prospectUserID: $scope.userID, //
                 prospectQuestionID: prospectQuestionID //
             });
-            //TODO: toggle conversationStarted to false
+            Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID, false);
         }else{
             alert('question has not been answered yet');
         }
@@ -420,6 +420,7 @@ angular.module('mychat.controllers', [])
             prospectUserID: prospectUserID,
             prospectQuestionID: prospectQuestionID  
         });
+        Users.toggleQuestionBackAfterClick($scope.userID, advisorKey, false);
     }
 })
 
