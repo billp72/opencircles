@@ -77,9 +77,9 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
     });
 })
 
-.config(function ($stateProvider, $urlRouterProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     console.log("setting config");
-
+    $ionicConfigProvider.tabs.position('top');
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
     // Set up the various states which the app can be in.
@@ -134,7 +134,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         views: {
             'tab-rooms': {
                 templateUrl: 'templates/tab-rooms.html',
-                controller: 'RoomsCtrl'
+                controller: 'ProspectCtrl'
             }
         }
     })
@@ -148,11 +148,11 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         }
     })
     .state('menu.tab.student', {
-        url: '/studentrooms/:schoolid',
+        url: '/studentrooms/:schoolID',
         views: {
             'tab-student': {
                 templateUrl: 'templates/tab-rooms-student.html',
-                controller: 'StudentCtrl'
+                controller: 'AdvisorCtrl'
             }
         }
     })
@@ -161,7 +161,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         views: {
             'tab-converse': {
                 templateUrl: 'templates/tab-student-convers.html',
-                controller: 'StudentConversCtrl'
+                controller: 'AdvisorConversationsCtrl'
             }
         }
     })
@@ -175,11 +175,20 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         }
     })
      .state('menu.tab.chat', {
-        url: '/chat/:userId/:schoolid/:questionID/:userID/:indicatorToggle/:question',
+        url: '/chat/:advisorID/:schoolID/:indicatorToggle/:question/:advisorKey/:prospectUserID/:prospectQuestionID',
         views: {
             'tab-chat':{
                 templateUrl: 'templates/tab-chat.html',
                 controller: 'ChatCtrl'  
+            }   
+        }
+    })
+     .state('menu.tab.answer', {
+        url: '/answer/:advisorID/:schoolID/:questionID/:prospectID/:indicatorToggle/:question',
+        views: {
+            'tab-answer':{
+                templateUrl: 'templates/tab-answer.html',
+                controller: 'AnswerCtrl'  
             }   
         }
     });

@@ -17,6 +17,17 @@
                 <span class="input-label">Display Name</span>
                 <input ng-model="user.displayname" type="text">
             </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Select Grade-level
+                </div>
+                <select ng-model="user.grade">
+                    <option>Freshmen</option>
+                    <option>Sophmore</option>
+                    <option>Junior</option>
+                    <option>Senior</option>
+                </select>
+            </label>
             <button class="button button-full button-positive" ng-click="createUser(user)">Create</button>
         </div>
     </ion-content>

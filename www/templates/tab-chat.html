@@ -6,14 +6,7 @@
                     wrap
                 </ion-option-button>
             </ion-item>
-            <ion-item class="item item-input-inset">
-                <label class="item-input-wrapper">
-                    <input type="text" ng-model="IM.textMessage" placeholder="Type in your message...">
-                </label>
-                <button ng-click="sendMessage(IM.textMessage)" class="button button-small button-balanced">
-                    Send
-                </button>
-            </ion-item>
+            
             <ion-item ng-hide="chats" class="textCenter">
                 <i class="icon ion-loading-c"></i> Loading Chats
             </ion-item>
@@ -21,7 +14,7 @@
                 <h4>No messages in this room. Send message to start.</h4>
             </ion-item>
             <ion-item ng-repeat="chat in chats | orderBy:'createdAt':true" type="item-text-wrap">
-                <h4 ng-class="{advisors: chat.schoolid}">{{chat.from}} :</h4>
+                <h4 ng-class="{advisors: chat.schoolID}">{{chat.from}} :</h4>
                 <span am-time-ago="chat.createdAt" class="item-note">
                 </span>
                 <pre>{{chat.message}}</pre>
@@ -36,5 +29,13 @@
             </ion-item>
         </ion-list>
 
-    </ion-content>
+    </ion-content> 
+    <ion-footer-bar>
+        <label class="item-input-wrapper nobgcolor">
+            <input type="text" ng-model="IM.textMessage" placeholder="Type in your message...">
+        </label>
+            <button ng-click="sendMessage(IM.textMessage)" class="button button-small button-balanced">
+                Send
+        </button>
+    </ion-footer-bar> 
 </ion-view>

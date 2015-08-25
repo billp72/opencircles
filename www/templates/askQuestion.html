@@ -6,22 +6,23 @@
     <ion-content class="padding">
         <div class="list">
             <label class="item item-input">
-                <span class="input-label">Search School</span>
+                <i class="icon ion-search placeholder-icon"></i>
                 <input type="search" placeholder="School name" ng-change="search()" ng-model="data.search">
             </label>
             <label class="item item-input item-select">
                 <div class="input-label">
                     Select School
                 </div>
-                <select ng-model="user.sid" ng-options="select.schoolname for select in data.list" ng-change="update(user.sid)">
+                <select ng-model="user.schoolID" ng-options="select.schoolname for select in data.list" ng-change="update(user.schoolID)">
                 </select>
             </label>
             <label class="item item-input">
-                <textarea my-maxlength="100" name="comment" id="comment-textarea" ng-model="user.question" placeHolder="write questions here..."></textarea>
+                <textarea my-maxlength="100" row="100" name="comment" id="comment-textarea" class="no-resize" ng-model="user.question" placeHolder="write questions here..."></textarea>
             </label>
-            <button ng-disabled="disable" class="button button-full button-positive" ng-click="ask(user)">Ask Question</button>
-
             <div ng-model="error">{{error}}</div>
         </div>
     </ion-content>
+    <ion-footer-bar>
+        <button ng-disabled="disable" class="button button-full button-positive" ng-click="ask(user)">Ask Question</button>
+    </ion-footer-bar>
 </ion-view>

@@ -21,7 +21,7 @@
 }
 #comment-textarea{
     background-color: lightyellow;
-    height:200px;
+    height:150px;
 }
 .started-conversation {
     color:blue;
@@ -52,4 +52,7 @@ p.space{
 pre{
     font-family: arial sans-seriff;
     font-size: .95em;
+}
+.item-input-wrapper.nobgcolor{
+    background: none !important;
 }

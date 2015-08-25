@@ -17,8 +17,8 @@ angular.module('mychat.directives', [])
       ngModelCtrl.$parsers.push(fromUser);
     }
   }; 
-})
-.directive('displayText', ['$compile' /*, 'Store'*/, function ($compile /*, Store*/) {
+});
+/*.directive('displayText', ['$compile', function ($compile) {
     
   return {
     restrict: 'C', 
@@ -40,6 +40,6 @@ angular.module('mychat.directives', [])
         
     }
   };
-}])
+}])*/
 
 
