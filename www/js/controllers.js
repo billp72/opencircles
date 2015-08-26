@@ -22,11 +22,6 @@ angular.module('mychat.controllers', [])
 
     $scope.update = function(school){
         $scope.schoolInfo = school
-        //$scope.selected = edu.domain;
-           /* $scope.test = {
-                txt: edu.selected.domain
-            }  */   
-
     }
      function generatePass() {
         var possibleChars = ['abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?_-'];
@@ -95,7 +90,7 @@ angular.module('mychat.controllers', [])
     }
     $scope.createUser = function (user) {
         console.log("Create User Function called");
-        if (user && user.email && user.password && user.displayname) {
+        if (!!user && !!user.email && !!user.password && !!user.displayname) {
             $ionicLoading.show({
                 template: 'Signing Up...'
             });
@@ -128,8 +123,8 @@ angular.module('mychat.controllers', [])
     }
     $scope.createStudent = function (user) {
         console.log("Create Student Function called");
-        if (user && user.schoolemail && /*emailEDUextention(user.schoolemail)[0] === 'edu' &&*/ user.displayname && !!$scope.schoolInfo) {
-    
+        if (!!user && !!user.schoolemail && /*emailEDUextention(user.schoolemail)[0] === 'edu' &&*/ !!user.displayname && !!user.schoolID) {
+          
             $ionicLoading.show({
                 template: 'Signing Up...'
             });
@@ -157,8 +152,8 @@ angular.module('mychat.controllers', [])
                             var room = ref.child("schools").child(stripDot.strip($scope.schoolInfo.domain));
                             room.set({
                                 icon: "ion-university",
-                                schoolname: $scope.schoolInfo.name,
-                                schoolID: stripDot.strip($scope.schoolInfo.domain),
+                                schoolname: user.schoolID.name,
+                                schoolID: stripDot.strip(user.schoolID.domain),
                                 ID: room.key()
                             },function(err){
                                 if(err) throw err;
@@ -287,7 +282,7 @@ angular.module('mychat.controllers', [])
         toggleQuestionID = '';
     //$scope.students = [];
     var advisorKey          = $state.params.advisorKey,
-        schoolID            = $state.params.schoolID != 'false' ? $state.params.schoolID : $scope.schoolID,
+        schoolID            = $state.params.schoolID,
         advisorID           = $state.params.advisorID,
         prospectUserID      = $state.params.prospectUserID,
         prospectQuestionID  = $state.params.prospectQuestionID,
@@ -327,7 +322,7 @@ angular.module('mychat.controllers', [])
     }
 
     $scope.sendMessage = function (msg) {
-        Chats.send($scope.displayName, $scope.schoolID, msg, toggleUserID, toggleQuestionID, indicatorToggle);
+        Chats.send($scope.displayName, schoolID, msg, toggleUserID, toggleQuestionID, indicatorToggle);
         $scope.IM.textMessage = "";
     }
 //removes a single chat message
@@ -341,7 +336,7 @@ angular.module('mychat.controllers', [])
             if(!!$scope.schoolID){
                 $scope.modal.hide();
                 $state.go('menu.tab.student', {
-                    schoolID: $scope.schoolID
+                    schoolID: schoolID
                 });
             }else{
                  $scope.modal.hide();
@@ -412,7 +407,7 @@ angular.module('mychat.controllers', [])
         //TODO: toggle conversationStarted to false
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
-            schoolID: false,
+            schoolID: $scope.schoolID,
             indicatorToggle:true,
             question: question,
             advisorKey: advisorKey,
