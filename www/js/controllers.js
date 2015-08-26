@@ -108,7 +108,8 @@ angular.module('mychat.controllers', [])
                 ref.child("users").child(userData.uid).set({
                    user:{
                         email: user.email,
-                        displayName: user.displayname
+                        displayName: user.displayname,
+                        grade: user.grade
                     }
                 });
                 $ionicLoading.hide();
@@ -139,12 +140,10 @@ angular.module('mychat.controllers', [])
                 alert("User created successfully!");
                 ref.child("users").child(userData.uid).set({
                     user:{
-                        /*email: user.email,*/
                         displayName: user.displayname,
-                        campus: user.campus,
+                        grade: user.grade,
                         schoolID: stripDot.strip($scope.schoolInfo.domain),
                         schoolEmail: user.schoolemail
-
                     }
                 });
                 $ionicLoading.hide();
@@ -153,8 +152,8 @@ angular.module('mychat.controllers', [])
             }).then(function(userData){
                     var school = Rooms.getSchoolBySchoolID(stripDot.strip($scope.schoolInfo.domain));
                     school.$loaded(function(data){
+                        //if the school doesn't exist already, add it
                         if(data.length <= 0){
-                            //var room = ref.child("schools").push();
                             var room = ref.child("schools").child(stripDot.strip($scope.schoolInfo.domain));
                             room.set({
                                 icon: "ion-university",
