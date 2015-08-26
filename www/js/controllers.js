@@ -137,7 +137,7 @@ angular.module('mychat.controllers', [])
                     user:{
                         displayName: user.displayname,
                         grade: user.grade,
-                        schoolID: stripDot.strip($scope.schoolInfo.domain),
+                        schoolID: stripDot.strip(user.schoolID.domain),
                         schoolEmail: user.schoolemail
                     }
                 });
