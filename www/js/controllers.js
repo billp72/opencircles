@@ -145,11 +145,11 @@ angular.module('mychat.controllers', [])
                 $scope.modal1.hide();
                 $scope.modal1.remove();
             }).then(function(userData){
-                    var school = Rooms.getSchoolBySchoolID(stripDot.strip($scope.schoolInfo.domain));
+                    var school = Rooms.getSchoolBySchoolID(stripDot.strip(user.schoolID.domain));
                     school.$loaded(function(data){
                         //if the school doesn't exist already, add it
                         if(data.length <= 0){
-                            var room = ref.child("schools").child(stripDot.strip($scope.schoolInfo.domain));
+                            var room = ref.child("schools").child(stripDot.strip(user.schoolID.domain));
                             room.set({
                                 icon: "ion-university",
                                 schoolname: user.schoolID.name,
