@@ -1,7 +1,7 @@
 <ion-view view-title="Questions">
     <ion-content>
         <ion-list ng-show="rooms" class="display-text">
-            <ion-item class="item-icon-left" ng-repeat="room in rooms" type="item-text-wrap" ng-click="openAnswerQuestion(room.question, room.userID, room.questionID, room.$id)">
+            <ion-item class="item-icon-left" ng-repeat="room in rooms" type="item-text-wrap" ng-click="openChatRoom(room.question, room.userID, room.questionID, room.$id)">
                 <i class="icon {{room.icon}}"></i>
                 <h2>{{room.question}}</h2>
             </ion-item>

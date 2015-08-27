@@ -485,7 +485,7 @@ angular.module('mychat.controllers', [])
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
      });
-    $scope.openAnswerQuestion = function (question, prospectUserID, prospectQuestionID, schoolsQuestionID) {
+    $scope.openChatRoom = function (question, prospectUserID, prospectQuestionID, schoolsQuestionID) {
 
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
