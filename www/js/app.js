@@ -56,16 +56,6 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
             }
         });
 
-      
-        /*$rootScope.profile = function(template){
-
-                $ionicModal.fromTemplateUrl('templates/'+template+'.html', {
-                scope: $rootScope
-            }).then(function (modal) {
-                $rootScope.modal = modal;
-                $rootScope.modal.show();
-            });
-        }*/
         
         $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, error) {
             // We can catch the error thrown when the $requireAuth promise is rejected
@@ -175,20 +165,11 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         }
     })
      .state('menu.tab.chat', {
-        url: '/chat/:advisorID/:schoolID/:indicatorToggle/:question/:advisorKey/:prospectUserID/:prospectQuestionID',
+        url: '/chat/:advisorID/:schoolID/:indicatorToggle/:question/:advisorKey/:prospectUserID/:prospectQuestionID/:schoolsQuestionID',
         views: {
             'tab-chat':{
                 templateUrl: 'templates/tab-chat.html',
                 controller: 'ChatCtrl'  
-            }   
-        }
-    })
-     .state('menu.tab.answer', {
-        url: '/answer/:advisorID/:schoolID/:questionID/:prospectID/:indicatorToggle/:question',
-        views: {
-            'tab-answer':{
-                templateUrl: 'templates/tab-answer.html',
-                controller: 'AnswerCtrl'  
             }   
         }
     });
