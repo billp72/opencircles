@@ -278,8 +278,6 @@ angular.module('mychat.controllers', [])
     $scope.IM = {
         textMessage: ""
     };
-   
-    //$scope.students = [];
     var advisorKey          = $state.params.advisorKey,
         schoolID            = $state.params.schoolID,
         advisorID           = $state.params.advisorID,
