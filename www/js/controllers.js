@@ -267,7 +267,7 @@ angular.module('mychat.controllers', [])
 /*
 * opens the private chat room
 */
-.controller('ChatCtrl', function ($scope, $rootScope, Chats, Users, Rooms, $state, $window, $ionicLoading, $ionicModal) {
+.controller('ChatCtrl', function ($scope, $rootScope, Chats, Users, Rooms, $state, $window, $ionicLoading, $ionicModal, $ionicScrollDelegate, $timeout) {
     //console.log("Chat Controller initialized");
     if(!$scope.schoolID){
         $scope.schoolID = Users.getIDS('schoolID');
@@ -278,6 +278,19 @@ angular.module('mychat.controllers', [])
     $scope.IM = {
         textMessage: ""
     };
+    var txtInput;
+    $timeout(function(){
+        footerBar = document.body.querySelector('#userMessagesView .bar-footer');
+        txtInput = angular.element(footerBar.querySelector('input'));
+    },0)
+    function keepKeyboardOpen() {
+      console.log('keepKeyboardOpen');
+      txtInput.one('blur', function() {
+        console.log('textarea blur, focus back on it');
+        txtInput[0].focus();
+      });
+    }
+    var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
     var advisorKey          = $state.params.advisorKey,
         schoolID            = $state.params.schoolID,
         advisorID           = $state.params.advisorID,
@@ -311,6 +324,14 @@ angular.module('mychat.controllers', [])
     if (roomName) {
         $scope.roomName = " - " + roomName;
         $scope.chats = Chats.all($scope.displayName);
+        $scope.$watch('chats', function (){
+            $timeout(function() {
+                keepKeyboardOpen();
+                viewScroll.scrollBottom();
+            }, 0);
+
+        },true);
+ 
             $rootScope.$on('message.sent', function (event, value){
                 $scope.usersName = value;
             })
