@@ -278,7 +278,7 @@ angular.module('mychat.controllers', [])
     $scope.IM = {
         textMessage: ""
     };
-    
+   
     //$scope.students = [];
     var advisorKey          = $state.params.advisorKey,
         schoolID            = $state.params.schoolID,
@@ -301,7 +301,8 @@ angular.module('mychat.controllers', [])
         if(!!schoolsQuestionID){
             firstMessage=true;
         }
-        $scope.question  = $state.params.question;
+       
+        $scope.question = $state.params.question;
      
         Chats.selectRoom(schoolID, advisorID, advisorKey);
 
@@ -335,7 +336,6 @@ angular.module('mychat.controllers', [])
             $ionicLoading.show({
                 template: 'Sending...'
             });
-            var advisorKey1='';
                 Users.addQuestionToUser(
                     schoolID,
                     advisorID,
@@ -345,7 +345,7 @@ angular.module('mychat.controllers', [])
                     prospectUserID //prospects ID TODO: get this and pass it as a param
                 )
                 .then(function (questionData){
-                    advisorKey1 = questionData.key();
+                    $scope.advisorKey = questionData.key();
                     Users.addAnswerToAdvisor(
                         $scope.displayName,
                         schoolID,
@@ -358,14 +358,14 @@ angular.module('mychat.controllers', [])
                             prospectUserID, 
                             prospectQuestionID, 
                             advisorID, 
-                            advisorKey1,
+                            $scope.advisorKey,
                             schoolsQuestionID,
                             schoolID
                         )
                             
                     }).then(function(){
                             firstMessage=false;
-                             Chats.selectRoom(schoolID, advisorID, advisorKey1);
+                             Chats.selectRoom(schoolID, advisorID, $scope.advisorKey);
                              $scope.chats = Chats.all($scope.displayName);
                              $scope.IM.textMessage = "";
                              $ionicLoading.hide();
@@ -380,7 +380,8 @@ angular.module('mychat.controllers', [])
     }
 //remove question/conversation once dialog is confirmed
     $scope.removePerm = function () {
-       var val = Chats.wrapitup(advisorKey, advisorID, prospectQuestionID, prospectUserID);
+       var advkey = !!advisorKey ? advisorKey : $scope.advisorKey;
+       var val = Chats.wrapitup(advkey, advisorID, prospectQuestionID, prospectUserID);
        if(typeof val !== "string"){
             if(!!$scope.schoolID){
                 $scope.modal.hide();
