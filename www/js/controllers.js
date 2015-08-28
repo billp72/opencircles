@@ -359,10 +359,9 @@ angular.module('mychat.controllers', [])
                             prospectQuestionID, 
                             advisorID, 
                             advisorKey1,
-                            question,
                             schoolsQuestionID,
                             schoolID
-                        ) 
+                        )
                             
                     }).then(function(){
                             firstMessage=false;

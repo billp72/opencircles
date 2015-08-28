@@ -23,9 +23,6 @@ angular.module('mychat.services', ['firebase'])
         },
         wrapitup: function(advisorKey, advisorID, prospectQuestionID, prospectUserID){
             var returnval;
-
-            console.log('three ',advisorKey, advisorID, prospectQuestionID, prospectUserID);
-
             var question = ref.child(advisorID).child('questions').child(advisorKey);
                 question.remove(
                     function (err){
@@ -185,19 +182,19 @@ angular.module('mychat.services', ['firebase'])
                 };
             return user.$add(chatMessage);
        },
-       updateProspectQuestion: function (studentID, questionID, advisorID, advisorKey, question, originalID, schoolID){
+       updateProspectQuestion: function (studentID, questionID, advisorID, advisorKey, originalID, schoolID){
             var update = ref.child(studentID).child('questions').child(questionID);
-            update.update({advisorID: advisorID, advisorKey: advisorKey, conversationStarted: true});
-            Rooms.getRef().child(schoolID).child('questions').child(originalID).remove(
-                function(err){
-                    if(err){
-
+                update.update({advisorID: advisorID, advisorKey: advisorKey, conversationStarted: true});
+                Rooms.getRef().child(schoolID).child('questions').child(originalID).remove(
+                    function(err){
+                        if(err){
+                            throw err;
+                        }else{
+                        
+                        }
                     }
-                }
-            )
-           /* question.$remove(questionID).then(function (){
-                //do stuff here
-            });*/
+                )
+        
        },
        toggleQuestionBackAfterClick: function (toggleUserID, toggleQuestionID, indicatorToggle){
              ref.child(toggleUserID).child('questions').child(toggleQuestionID)
@@ -246,7 +243,7 @@ angular.module('mychat.services', ['firebase'])
 /*
 * autocomplete search
 */
-.factory('SchoolDataService', function($q, $timeout, schoolData) {
+.factory('SchoolDataService', function ($q, $timeout, schoolData) {
         var datas = schoolData.all();
         var schools='';
         datas.$loaded(function(data){
@@ -261,10 +258,8 @@ angular.module('mychat.services', ['firebase'])
                 return 0;
             });
         });
-            var searchSchool = function(searchFilter) {
-         
-            console.log('Searching school for ' + searchFilter);
-
+            var searchSchool = function(searchFilter) {    
+            //console.log('Searching school for ' + searchFilter);
             var deferred = $q.defer();
 
             var matches = schools.filter( function(school) {
