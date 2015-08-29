@@ -284,9 +284,9 @@ angular.module('mychat.controllers', [])
         txtInput = angular.element(footerBar.querySelector('input'));
     },0)
     function keepKeyboardOpen() {
-      console.log('keepKeyboardOpen');
+      //console.log('keepKeyboardOpen');
       txtInput.one('blur', function() {
-        console.log('textarea blur, focus back on it');
+        //console.log('textarea blur, focus back on it');
         txtInput[0].focus();
       });
     }
@@ -314,7 +314,7 @@ angular.module('mychat.controllers', [])
         }
        
         $scope.question = $state.params.question;
-     
+        //console.log('id',advisorID, 'key', advisorKey);
         Chats.selectRoom(schoolID, advisorID, advisorKey);
 
 
