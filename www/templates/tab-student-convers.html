@@ -3,7 +3,7 @@
         <ion-list ng-show="rooms">
             <ion-item class="item-icon-left" ng-repeat="room in rooms" type="item-text-wrap" ng-click="openChatRoom(room.question, room.$id, room.prospectUserID, room.prospectQuestionID)">
                 <i class="icon {{room.icon}}"></i>
-                <h2 ng-class="{'started-conversation': room.conversationStarted=='true'}">{{room.question}}</h2>
+                <h2 ng-class="{'started-conversation': room.conversationStarted}">{{room.question}}</h2>
             </ion-item>
         </ion-list>
          <ion-item class="textCenter" ng-model="message">You have {{rooms.length}} conversation(s)</ion-item>

@@ -296,7 +296,6 @@ angular.module('mychat.controllers', [])
         advisorID           = $state.params.advisorID,
         prospectUserID      = $state.params.prospectUserID,
         prospectQuestionID  = $state.params.prospectQuestionID,
-        indicatorToggle     = $state.params.indicatorToggle,
         schoolsQuestionID   = $state.params.schoolsQuestionID,
         toggleUserID        = '',
         toggleQuestionID    = '',
@@ -344,7 +343,7 @@ angular.module('mychat.controllers', [])
     }
     $scope.sendMessage = function (msg) {
         if(!firstMessage){
-            Chats.send($scope.displayName, schoolID, msg, toggleUserID, toggleQuestionID, indicatorToggle);
+            Chats.send($scope.displayName, schoolID, msg, toggleUserID, toggleQuestionID);
             $scope.IM.textMessage = "";
         }else{//first time an advisor asnwers a question
                 $ionicLoading.show({
@@ -359,7 +358,7 @@ angular.module('mychat.controllers', [])
                     prospectUserID 
                 )
                 .then(function (results){
-                   $scope.andAnswerAdvisor = results;
+                   $scope.addAnswerAdvisor = results;
                    $scope.advisorKey = results.key();
                    return Users.addAnswerToAdvisor( //request 2
                         $scope.displayName,
@@ -388,7 +387,7 @@ angular.module('mychat.controllers', [])
                     $scope.IM.textMessage = "";
                     $ionicLoading.hide();
 
-                    $scope.andAnswerAdvisor = null;
+                    $scope.addAnswerAdvisor = null;
                     $scope.updateProspectQuestion = null;
                 }).catch (function(error){
                     alert('error sending message: ' + error);
@@ -448,14 +447,13 @@ angular.module('mychat.controllers', [])
             $state.go('menu.tab.chat', {
                 advisorID: advisorID,
                 schoolID: schoolID,
-                indicatorToggle:true,
                 question: question,
                 advisorKey: advisorKey,
                 prospectUserID: $scope.userID, //
                 prospectQuestionID: prospectQuestionID, //
                 schoolsQuestionID: '' 
             });
-            Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID, 'false');
+            Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID);
         }else{
             alert('question has not been answered yet');
         }
@@ -482,14 +480,13 @@ angular.module('mychat.controllers', [])
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
             schoolID: $scope.schoolID,
-            indicatorToggle:true,
             question: question,
             advisorKey: advisorKey,
             prospectUserID: prospectUserID,
             prospectQuestionID: prospectQuestionID,
             schoolsQuestionID: ''   
         });
-        Users.toggleQuestionBackAfterClick($scope.userID, advisorKey, 'false');
+        Users.toggleQuestionBackAfterClick($scope.userID, advisorKey);
     }
 })
 
@@ -513,7 +510,6 @@ angular.module('mychat.controllers', [])
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
             schoolID: $scope.schoolID,
-            indicatorToggle:true,
             question: question,
             advisorKey: '',
             prospectUserID: prospectUserID,

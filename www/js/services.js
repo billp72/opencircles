@@ -72,7 +72,7 @@ angular.module('mychat.services', ['firebase'])
                 chats = $firebase(ref.child(advisorID).child('questions').child(advisorKey).child('conversations')).$asArray();
             }
         },
-        send: function (from, schoolID, message, toggleUserID, toggleQuestionID, indicatorToggle) {
+        send: function (from, schoolID, message, toggleUserID, toggleQuestionID) {
             //console.log("sending message from :" + from.displayName + " & message is " + message);
             
             if (from && message) {
@@ -85,7 +85,7 @@ angular.module('mychat.services', ['firebase'])
                 };
                  chats.$add(chatMessage).then(function (data) {
                     ref.child(toggleUserID).child('questions').child(toggleQuestionID)
-                        .update({'conversationStarted':indicatorToggle});
+                        .update({'conversationStarted':true});
             
                 });
               
@@ -184,7 +184,7 @@ angular.module('mychat.services', ['firebase'])
        },
        updateProspectQuestion: function (studentID, questionID, advisorID, advisorKey, originalID, schoolID){
             var update = ref.child(studentID).child('questions').child(questionID);
-                update.update({advisorID: advisorID, advisorKey: advisorKey, conversationStarted: 'true'});
+                update.update({advisorID: advisorID, advisorKey: advisorKey, conversationStarted: true});
                 Rooms.getRef().child(schoolID).child('questions').child(originalID).remove(
                     function(err){
                         if(err){
@@ -194,9 +194,9 @@ angular.module('mychat.services', ['firebase'])
                 )
         
        },
-       toggleQuestionBackAfterClick: function (toggleUserID, toggleQuestionID, indicatorToggle){
+       toggleQuestionBackAfterClick: function (toggleUserID, toggleQuestionID){
              ref.child(toggleUserID).child('questions').child(toggleQuestionID)
-                        .update({'conversationStarted':indicatorToggle});
+                        .update({'conversationStarted':false});
        }
     }
 })
