@@ -21,30 +21,53 @@ angular.module('mychat.services', ['firebase'])
                 ref.key() === chat.$id; // true item has been removed
             });
         },
-        wrapitup: function(advisorKey, advisorID, prospectQuestionID, prospectUserID){
+        wrapitup: function(advisorKey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID){
             var returnval;
-            var question = ref.child(advisorID).child('questions').child(advisorKey);
-                question.remove(
-                    function (err){
-                    if(err){
-                        returnval = 'there was an error deleting' + err;
-                    }else{
-                        questionProspect = ref.child(prospectUserID).child('questions').child(prospectQuestionID);
-                        questionProspect.remove(
-                            function (err){
-                                if(err){
-                                    returnval = 'there was an error deleting' + err;
-                                }else{
-                                    returnval = true;
-                                }
+            if(!schoolsQuestionID){
+                var question = ref.child(advisorID).child('questions').child(advisorKey);
+                    question.remove(
+                        function (err){
+                            if(err){
+                                returnval = 'there was an error deleting' + err;
+                            }else{
+                                questionProspect = ref.child(prospectUserID).child('questions').child(prospectQuestionID);
+                                questionProspect.remove(
+                                    function (err){
+                                        if(err){
+                                            returnval = 'there was an error deleting' + err;
+                                        }else{
+                                            returnval = true;
+                                        }
 
-                            }
-                        );
+                                    }
+                                    );
                                         
-                    }
-                }
-            );
-    
+                            }
+                        }
+                    );
+            }else{
+                 var question = Rooms.getRef().child(schoolID).child('questions').child(schoolsQuestionID);
+                    question.remove(
+                        function (err){
+                            if(err){
+                                returnval = 'there was an error deleting' + err;
+                            }else{
+                                questionProspect = ref.child(prospectUserID).child('questions').child(prospectQuestionID);
+                                questionProspect.remove(
+                                    function (err){
+                                        if(err){
+                                            returnval = 'there was an error deleting' + err;
+                                        }else{
+                                            returnval = true;
+                                        }
+
+                                    }
+                                    );
+                                        
+                            }
+                        }
+                    );
+            }
             return returnval;
         },
         get: function (chatID) {

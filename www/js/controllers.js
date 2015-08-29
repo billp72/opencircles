@@ -403,7 +403,7 @@ angular.module('mychat.controllers', [])
 //remove question/conversation once dialog is confirmed
     $scope.removePerm = function () {
        var advkey = !!advisorKey ? advisorKey : $scope.advisorKey;
-       var val = Chats.wrapitup(advkey, advisorID, prospectQuestionID, prospectUserID);
+       var val = Chats.wrapitup(advkey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID);
        if(typeof val !== "string"){
             if(!!$scope.schoolID){
                 $scope.modal.hide();
