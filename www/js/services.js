@@ -68,8 +68,11 @@ angular.module('mychat.services', ['firebase'])
         },
         selectRoom: function (schoolID, advisorID, advisorKey) {
             selectedRoomID = schoolID;
+            console.log('advisorKey: ', advisorKey);
             if(!!advisorKey){
                 chats = $firebase(ref.child(advisorID).child('questions').child(advisorKey).child('conversations')).$asArray();
+            }else{
+                chats = null;
             }
         },
         send: function (from, schoolID, message, toggleUserID, toggleQuestionID) {
