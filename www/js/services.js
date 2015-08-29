@@ -66,10 +66,10 @@ angular.module('mychat.services', ['firebase'])
             } else
                 return null;
         },
-        selectRoom: function (schoolID, userID, questionsID) {
+        selectRoom: function (schoolID, advisorID, advisorKey) {
             selectedRoomID = schoolID;
             if(!!questionsID){
-                chats = $firebase(ref.child(userID).child('questions').child(questionsID).child('conversations')).$asArray();
+                chats = $firebase(ref.child(advisorID).child('questions').child(advisorKey).child('conversations')).$asArray();
             }
         },
         send: function (from, schoolID, message, toggleUserID, toggleQuestionID, indicatorToggle) {
