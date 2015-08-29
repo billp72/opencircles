@@ -303,8 +303,8 @@ angular.module('mychat.controllers', [])
         firstMessage        = false;
 
         if(!!$scope.schoolID){
-            toggleUserID     = $state.params.prospectUserID;
-            toggleQuestionID = $state.params.prospectQuestionID;
+            toggleUserID     = prospectUserID;
+            toggleQuestionID = prospectQuestionID;
         }else{
             toggleUserID     = advisorID;
             toggleQuestionID = advisorKey;
