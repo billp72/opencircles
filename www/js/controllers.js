@@ -455,7 +455,7 @@ angular.module('mychat.controllers', [])
                 prospectQuestionID: prospectQuestionID, //
                 schoolsQuestionID: '' 
             });
-            Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID, false);
+            Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID, 'false');
         }else{
             alert('question has not been answered yet');
         }
@@ -489,7 +489,7 @@ angular.module('mychat.controllers', [])
             prospectQuestionID: prospectQuestionID,
             schoolsQuestionID: ''   
         });
-        Users.toggleQuestionBackAfterClick($scope.userID, advisorKey, false);
+        Users.toggleQuestionBackAfterClick($scope.userID, advisorKey, 'false');
     }
 })
 
