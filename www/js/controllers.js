@@ -324,26 +324,22 @@ angular.module('mychat.controllers', [])
     if (roomName) {
         $scope.roomName = " - " + roomName;
         $scope.chats = Chats.all($scope.displayName);
-        $scope.$watch('chats', function (){
-            $timeout(function() {
-                keepKeyboardOpen();
-                viewScroll.scrollBottom();
-            }, 0);
-
-        },true);
- 
-            $rootScope.$on('message.sent', function (event, value){
+        $rootScope.$on('message.sent', function (event, value){
                 $scope.usersName = value;
-            })
-            $scope.$watch('chats', function(newValue, oldValue){
-                if(newValue){
-                    if(!!$scope.usersName){
-                        if($scope.usersName !== $scope.displayName){
-                            navigator.notification.vibrate(500);
-                        }
+        })
+        $scope.$watch('chats', function(newValue, oldValue){
+            $timeout(function() {
+                    keepKeyboardOpen();
+                    viewScroll.scrollBottom();
+            }, 0);
+            if(newValue){
+                if(!!$scope.usersName){
+                    if($scope.usersName !== $scope.displayName){
+                         navigator.notification.vibrate(500);
                     }
                 }
-            },true);
+            }
+        },true);
             
     }
     $scope.sendMessage = function (msg) {
