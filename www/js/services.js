@@ -188,9 +188,7 @@ angular.module('mychat.services', ['firebase'])
                 Rooms.getRef().child(schoolID).child('questions').child(originalID).remove(
                     function(err){
                         if(err){
-                            throw err;
-                        }else{
-                        
+                            alert('an error occured ' + err);
                         }
                     }
                 )

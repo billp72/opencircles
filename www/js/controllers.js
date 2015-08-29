@@ -346,50 +346,58 @@ angular.module('mychat.controllers', [])
             },true);
             
     }
-
     $scope.sendMessage = function (msg) {
         if(!firstMessage){
             Chats.send($scope.displayName, schoolID, msg, toggleUserID, toggleQuestionID, indicatorToggle);
             $scope.IM.textMessage = "";
-        }else{//first time a user asnwers a question
-            $ionicLoading.show({
-                template: 'Sending...'
-            });
-                Users.addQuestionToUser(
+        }else{//first time an advisor asnwers a question
+                $ionicLoading.show({
+                    template: 'Sending...'
+                });
+                Users.addQuestionToUser( //request 1
                     schoolID,
                     advisorID,
                     $scope.question,
                     'ion-chatbubbles', 
-                    prospectQuestionID, //prospects question ID TODO: same as below
-                    prospectUserID //prospects ID TODO: get this and pass it as a param
+                    prospectQuestionID, 
+                    prospectUserID 
                 )
-                .then(function (questionData){
-                    $scope.advisorKey = questionData.key();
-                    Users.addAnswerToAdvisor(
+                .then(function (results){
+                   $scope.andAnswerAdvisor = results;
+                   $scope.advisorKey = results.key();
+                   return Users.addAnswerToAdvisor( //request 2
                         $scope.displayName,
                         schoolID,
                         msg,
-                        questionData.key(),
+                        $scope.advisorKey,
                         advisorID
+                    )               
+                })
+                .then(function (results){
+                    $scope.updateProspectQuestion = results;
+                    return Users.updateProspectQuestion( //request 3
+                        prospectUserID, 
+                        prospectQuestionID, 
+                        advisorID, 
+                        $scope.advisorKey,
+                        schoolsQuestionID,
+                        schoolID
                     )
-                    .then(function (advisorData){
-                        Users.updateProspectQuestion(
-                            prospectUserID, 
-                            prospectQuestionID, 
-                            advisorID, 
-                            $scope.advisorKey,
-                            schoolsQuestionID,
-                            schoolID
-                        )
                             
-                    }).then(function(){
-                            firstMessage=false;
-                             Chats.selectRoom(schoolID, advisorID, $scope.advisorKey);
-                             $scope.chats = Chats.all($scope.displayName);
-                             $scope.IM.textMessage = "";
-                             $ionicLoading.hide();
-                        });
-                    });
+                })
+                .then(function(){
+                    firstMessage=false;
+                    Chats.selectRoom(schoolID, advisorID, $scope.advisorKey);
+                    $scope.chats = Chats.all($scope.displayName);
+                    $scope.IM.textMessage = "";
+                    $ionicLoading.hide();
+
+                    $scope.andAnswerAdvisor = null;
+                    $scope.updateProspectQuestion = null;
+                }).catch (function(error){
+                    alert('error sending message: ' + error);
+                })
+                        
         }
 
     }
