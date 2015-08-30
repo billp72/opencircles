@@ -138,7 +138,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         }
     })
     .state('menu.tab.student', {
-        url: '/studentrooms/:schoolID',
+        url: '/studentrooms',
         views: {
             'tab-student': {
                 templateUrl: 'templates/tab-rooms-student.html',

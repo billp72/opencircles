@@ -178,9 +178,21 @@ angular.module('mychat.services', ['firebase'])
         addQuestionToUser: function(schoolID, ID, question, icon, questionID, prospectUserID){
             var user = this.getUserByID(ID);
             if(!!questionID){
-                return user.$add({schoolID: schoolID, question: question, prospectQuestionID: questionID, prospectUserID: prospectUserID, icon: icon});
+                return user.$add(
+                    {
+                        schoolID: schoolID, 
+                        question: question, 
+                        prospectQuestionID: questionID, 
+                        prospectUserID: prospectUserID, 
+                        icon: icon
+                    });
             }else{
-                return user.$add({schoolID: schoolID, question: question, icon: icon});
+                return user.$add(
+                    {
+                        schoolID: schoolID, 
+                        question: question, 
+                        icon: icon
+                    });
             }
         },
         getUserConversation: function (userID, questionID){

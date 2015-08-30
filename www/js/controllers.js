@@ -200,8 +200,8 @@ angular.module('mychat.controllers', [])
                         Users.storeIDS(val.schoolID, 'schoolID');
                     }else{
                         $rootScope.prospect = true;
-                        $rootScope.advisor   = false;
-                        $rootScope.schoolID  = '';
+                        $rootScope.advisor  = false;
+                        $rootScope.schoolID = '';
                         //persist data
                         Users.storeIDS(true, 'prospect');
                         Users.removeItem('advisor');
@@ -216,9 +216,7 @@ angular.module('mychat.controllers', [])
                 
                     $ionicLoading.hide();
                     if(!!val.schoolID){
-                        $state.go('menu.tab.student', {
-                            schoolID: val.schoolID
-                        });
+                        $state.go('menu.tab.student');
                     }else{
                         $state.go('menu.tab.ask');
                     }
@@ -414,6 +412,8 @@ angular.module('mychat.controllers', [])
                  $scope.modal.hide();
                  $state.go('menu.tab.ask');
             }
+       }else{
+            alert(val);
        }
     }
 //dialog that warns user before question/conversation is deleted
@@ -501,7 +501,7 @@ angular.module('mychat.controllers', [])
     if(!$scope.schoolID){
         $scope.schoolID = Users.getIDS('schoolID');
     }
-    $scope.school = Rooms.getSchoolBySchoolID($state.params.schoolID);
+    $scope.school = Rooms.getSchoolBySchoolID($scope.schoolID);
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
      });
@@ -566,11 +566,11 @@ angular.module('mychat.controllers', [])
                                 quest.question,
                                 'ion-chatbubbles', 
                                 data.key() 
-                        ).then(function(){
-                            $ionicLoading.hide();
-                            $state.go('menu.tab.newest');
-                            $scope.data.search = '';
-                            $scope.user.question = '';
+                            ).then(function(){
+                                $ionicLoading.hide();
+                                $state.go('menu.tab.newest');
+                                $scope.data.search = '';
+                                $scope.user.question = '';
                         });
                     })
                 }else{
