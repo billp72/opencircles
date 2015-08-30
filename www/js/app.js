@@ -165,7 +165,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         }
     })
      .state('menu.tab.chat', {
-        url: '/chat/:advisorID/:schoolID/:question/:advisorKey/:prospectUserID/:prospectQuestionID/:schoolsQuestionID',
+        url: '/chat/:advisorID/:schoolID/:advisorKey/:prospectUserID/:prospectQuestionID/:schoolsQuestionID/:question',
         views: {
             'tab-chat':{
                 templateUrl: 'templates/tab-chat.html',

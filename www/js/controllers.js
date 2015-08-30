@@ -447,11 +447,11 @@ angular.module('mychat.controllers', [])
             $state.go('menu.tab.chat', {
                 advisorID: advisorID,
                 schoolID: schoolID,
-                question: question,
                 advisorKey: advisorKey,
                 prospectUserID: $scope.userID, //
                 prospectQuestionID: prospectQuestionID, //
-                schoolsQuestionID: '' 
+                schoolsQuestionID: '',
+                question: question 
             });
             Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID);
         }else{
@@ -480,11 +480,11 @@ angular.module('mychat.controllers', [])
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
             schoolID: $scope.schoolID,
-            question: question,
             advisorKey: advisorKey,
             prospectUserID: prospectUserID,
             prospectQuestionID: prospectQuestionID,
-            schoolsQuestionID: ''   
+            schoolsQuestionID: '',
+            question: question   
         });
         Users.toggleQuestionBackAfterClick($scope.userID, advisorKey);
     }
@@ -510,11 +510,11 @@ angular.module('mychat.controllers', [])
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
             schoolID: $scope.schoolID,
-            question: question,
             advisorKey: '',
             prospectUserID: prospectUserID,
             prospectQuestionID: prospectQuestionID,
-            schoolsQuestionID: schoolsQuestionID 
+            schoolsQuestionID: schoolsQuestionID,
+            question: question 
         });
     }
  
