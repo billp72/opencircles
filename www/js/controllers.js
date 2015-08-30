@@ -1,6 +1,6 @@
 angular.module('mychat.controllers', [])
 
-.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, Rooms, Users, $ionicLoading, $rootScope, SchoolDataService, schoolFormDataService, stripDot) {
+.controller('LoginCtrl', function ($scope, $ionicModal, $state, $firebaseAuth, Rooms, Users, $ionicLoading, $rootScope, $ionicHistory, SchoolDataService, schoolFormDataService, stripDot) {
     //console.log('Login Controller Initialized');
 
     var ref = new Firebase($scope.firebaseUrl);
@@ -19,7 +19,10 @@ angular.module('mychat.controllers', [])
             }
         )
     }
-
+    $scope.$on('$ionicView.enter', function(){
+            $ionicHistory.clearCache();
+            $ionicHistory.clearHistory();
+    });
     $scope.update = function(school){
         $scope.user.schoolemail = '@'+school.domain;
     }
@@ -249,7 +252,7 @@ angular.module('mychat.controllers', [])
         $rootScope.tabs = select;
     }
 })
-.controller('SettingsCtrl', function ($scope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth, $ionicHistory) {
+.controller('SettingsCtrl', function ($scope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth) {
     console.log('settings initialized');
 
     $scope.deleteAccount = function(){
@@ -266,8 +269,7 @@ angular.module('mychat.controllers', [])
             $ionicLoading.show({
                 template: 'Logging Out...'
             });
-            //$ionicHistory.clearCache();
-            $ionicHistory.clearHistory();
+
             Auth.$unauth();
     }
        
