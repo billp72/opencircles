@@ -21,7 +21,15 @@ angular.module('mychat.controllers', [])
     }
 
     $scope.update = function(school){
-        $scope.schoolInfo = school
+        $scope.user.schoolemail = '@'+school.domain;
+    }
+     function emailEDUextention(email){
+        var tolower = email.toLowerCase();
+        return (/[.]/.exec(tolower)) ? /[^.]+$/.exec(tolower) : undefined;
+    }
+    function emailDomain(email){
+        var tolower = email.toLowerCase();
+        return (/[@]/.exec(tolower)) ? /[^@]+$/.exec(tolower) : undefined;
     }
      function generatePass() {
         var possibleChars = ['abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?_-'];
@@ -117,13 +125,17 @@ angular.module('mychat.controllers', [])
         } else
             alert("Please fill all details");
     }
-    function emailEDUextention(email){
-        var tolower = email.toLowerCase();
-        return (/[.]/.exec(tolower)) ? /[^.]+$/.exec(tolower) : undefined;
-    }
     $scope.createStudent = function (user) {
         console.log("Create Student Function called");
-        if (!!user && !!user.schoolemail && /*emailEDUextention(user.schoolemail)[0] === 'edu' &&*/ !!user.displayname && !!user.schoolID) {
+        if (
+            !!user && 
+            !!user.schoolemail &&
+            !!user.displayname && 
+            !!user.schoolID &&
+             emailEDUextention(user.schoolemail)[0] === 'edu' &&
+             user.schoolID === emailDomain(user.schoolemail)[0] 
+             ) 
+        {
           
             $ionicLoading.show({
                 template: 'Signing Up...'
@@ -237,7 +249,7 @@ angular.module('mychat.controllers', [])
         $rootScope.tabs = select;
     }
 })
-.controller('SettingsCtrl', function ($scope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth) {
+.controller('SettingsCtrl', function ($scope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth, $ionicHistory) {
     console.log('settings initialized');
 
     $scope.deleteAccount = function(){
@@ -254,7 +266,8 @@ angular.module('mychat.controllers', [])
             $ionicLoading.show({
                 template: 'Logging Out...'
             });
-            //$scope = $scope.$new(true);
+            $ionicHistory.clearCache();
+            $ionicHistory.clearHistory();
             Auth.$unauth();
     }
        
