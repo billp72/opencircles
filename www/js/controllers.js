@@ -266,7 +266,7 @@ angular.module('mychat.controllers', [])
             $ionicLoading.show({
                 template: 'Logging Out...'
             });
-            $ionicHistory.clearCache();
+            //$ionicHistory.clearCache();
             $ionicHistory.clearHistory();
             Auth.$unauth();
     }
