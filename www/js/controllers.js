@@ -333,19 +333,15 @@ angular.module('mychat.controllers', [])
         $scope.roomName = " - " + roomName;
         $scope.chats = Chats.all($scope.displayName);
         $rootScope.$on('message.sent', function (event, value){
-                $scope.usersName = value;
-        })
+                $scope.from = value;
+        });
         $scope.$watch('chats', function(newValue, oldValue){
             $timeout(function() {
                     keepKeyboardOpen();
                     viewScroll.scrollBottom();
             }, 0);
-            if(newValue){
-                if(!!$scope.usersName){
-                    if($scope.usersName !== $scope.displayName){
-                         navigator.notification.vibrate(500);
-                    }
-                }
+            if(!!$scope.from && $scope.from !== $scope.displayName){
+                navigator.notification.vibrate(500);
             }
         },true);
             
