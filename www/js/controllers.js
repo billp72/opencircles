@@ -26,10 +26,6 @@ angular.module('mychat.controllers', [])
     $scope.update = function(school){
         $scope.user.schoolemail = '@'+school.domain;
     }
-     function emailEDUextention(email){
-        var tolower = email.toLowerCase();
-        return (/[.]/.exec(tolower)) ? /[^.]+$/.exec(tolower) : undefined;
-    }
     function emailDomain(email){
         var tolower = email.toLowerCase();
         return (/[@]/.exec(tolower)) ? /[^@]+$/.exec(tolower) : undefined;
@@ -135,7 +131,6 @@ angular.module('mychat.controllers', [])
             !!user.schoolemail &&
             !!user.displayname && 
             !!user.schoolID &&
-             emailEDUextention(user.schoolemail)[0] === 'edu' &&
              user.schoolID === emailDomain(user.schoolemail)[0] 
              ) 
         {
