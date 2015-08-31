@@ -56,3 +56,6 @@ pre{
 .item-input-wrapper.nobgcolor{
     background: none !important;
 }
+.displayname{
+    color:#a8a8a8;
+}

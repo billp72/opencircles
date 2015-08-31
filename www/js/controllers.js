@@ -310,6 +310,7 @@ angular.module('mychat.controllers', [])
         prospectUserID      = $state.params.prospectUserID,
         prospectQuestionID  = $state.params.prospectQuestionID,
         schoolsQuestionID   = $state.params.schoolsQuestionID,
+        displayName         = $state.params.displayName,
         toggleUserID        = '',
         toggleQuestionID    = '',
         firstMessage        = false;
@@ -368,7 +369,8 @@ angular.module('mychat.controllers', [])
                     $scope.question,
                     'ion-chatbubbles', 
                     prospectQuestionID, 
-                    prospectUserID 
+                    prospectUserID,
+                    displayName 
                 )
                 .then(function (results){
                    $scope.addAnswerAdvisor = results;
@@ -466,7 +468,8 @@ angular.module('mychat.controllers', [])
                 prospectUserID: $scope.userID, //
                 prospectQuestionID: prospectQuestionID, //
                 schoolsQuestionID: '',
-                question: question 
+                question: question,
+                displayName: '' 
             });
             Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID);
         }else{
@@ -499,7 +502,8 @@ angular.module('mychat.controllers', [])
             prospectUserID: prospectUserID,
             prospectQuestionID: prospectQuestionID,
             schoolsQuestionID: '',
-            question: question   
+            question: question,
+            displayName: ''   
         });
         Users.toggleQuestionBackAfterClick($scope.userID, advisorKey);
     }
@@ -520,7 +524,7 @@ angular.module('mychat.controllers', [])
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
      });
-    $scope.openChatRoom = function (question, prospectUserID, prospectQuestionID, schoolsQuestionID) {
+    $scope.openChatRoom = function (question, prospectUserID, prospectQuestionID, schoolsQuestionID, displayName) {
 
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
@@ -529,7 +533,8 @@ angular.module('mychat.controllers', [])
             prospectUserID: prospectUserID,
             prospectQuestionID: prospectQuestionID,
             schoolsQuestionID: schoolsQuestionID,
-            question: question 
+            question: question,
+            displayName: displayName 
         });
     }
  
@@ -541,6 +546,9 @@ angular.module('mychat.controllers', [])
     var icon='';
     if(!$scope.userID){
         $scope.userID = Users.getIDS('userID');
+    }
+    if(!$scope.displayName){
+        $scope.displayName = Users.getIDS('displayName');
     }
 
     $scope.user = {}
@@ -580,7 +588,8 @@ angular.module('mychat.controllers', [])
                                 $scope.userID,
                                 quest.question,
                                 'ion-chatbubbles', 
-                                data.key() 
+                                data.key(),
+                                $scope.displayName 
                             ).then(function(){
                                 $ionicLoading.hide();
                                 $state.go('menu.tab.newest');

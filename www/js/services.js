@@ -143,13 +143,14 @@ angular.module('mychat.services', ['firebase'])
             
             return $firebase(ref.child(schoolID).child('questions')).$asArray();
         },
-        addQuestionsToSchool: function(schoolID, userID, question, icon, questionID){
+        addQuestionsToSchool: function(schoolID, userID, question, icon, questionID, displayName){
             var qdata = {
                 schoolID: schoolID,
                 userID: userID,
                 question: question,
                 icon: icon,
-                questionID: questionID
+                questionID: questionID,
+                displayName: displayName
             }
         
             return $firebase(ref.child(schoolID).child('questions')).$asArray().$add(qdata);
@@ -175,7 +176,7 @@ angular.module('mychat.services', ['firebase'])
         getUserByID: function(studentID){
              return $firebase(ref.child(studentID).child('questions')).$asArray();
         },
-        addQuestionToUser: function(schoolID, ID, question, icon, questionID, prospectUserID){
+        addQuestionToUser: function(schoolID, ID, question, icon, questionID, prospectUserID, displayName){
             var user = this.getUserByID(ID);
             if(!!questionID){
                 return user.$add(
@@ -183,7 +184,8 @@ angular.module('mychat.services', ['firebase'])
                         schoolID: schoolID, 
                         question: question, 
                         prospectQuestionID: questionID, 
-                        prospectUserID: prospectUserID, 
+                        prospectUserID: prospectUserID,
+                        displayName: displayName, 
                         icon: icon
                     });
             }else{
