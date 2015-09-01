@@ -16,6 +16,8 @@ angular.module('mychat.controllers', [])
             function(matches) {
                 $scope.user.schoolID = matches[0];
                 $scope.data.list = matches;
+
+                $scope.user.schoolemail = '@'+$scope.user.schoolID.domain;
             }
         )
     }
@@ -121,8 +123,9 @@ angular.module('mychat.controllers', [])
                 alert("Error: " + error);
                 $ionicLoading.hide();
             });
-        } else
+        } else{
             alert("Please fill all details");
+        }
     }
     $scope.createStudent = function (user) {
         console.log("Create Student Function called");
@@ -131,7 +134,7 @@ angular.module('mychat.controllers', [])
             !!user.schoolemail &&
             !!user.displayname && 
             !!user.schoolID &&
-             user.schoolID === emailDomain(user.schoolemail)[0] 
+             user.schoolID.domain === emailDomain(user.schoolemail)[0] 
              ) 
         {
           
@@ -183,8 +186,10 @@ angular.module('mychat.controllers', [])
                 alert("Error: " + error);
                 $ionicLoading.hide();
             });
-        } else
+        } else{
             alert("Please fill all details properly");
+        }
+            
     }
     $scope.signIn = function (user) {
         
