@@ -556,7 +556,7 @@ angular.module('mychat.controllers', [])
         )
     }
     $scope.update = function (data){
-
+              
     }
     $scope.ask = function (quest){
 
@@ -587,7 +587,7 @@ angular.module('mychat.controllers', [])
                                 $scope.data.search = '';
                                 $scope.user.question = '';
                         });
-                    })
+                    });
                 }else{
                     alert('questions must be at least 15 characters long');
                 }
