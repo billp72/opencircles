@@ -77,7 +77,7 @@ angular.module('mychat.controllers', [])
         });
     }
    
-    $scope.verifyStudentEmail = function(enter){
+   /* $scope.verifyStudentEmail = function(enter){
         ref.resetPassword({
             email: enter.schoolemail
             }, function(error) {
@@ -96,7 +96,7 @@ angular.module('mychat.controllers', [])
                     $state.go('login');
                 }
             });
-    }
+    }*/
     $scope.createUser = function (user) {
         console.log("Create User Function called");
         if (!!user && !!user.email && !!user.password && !!user.displayname) {
@@ -175,11 +175,22 @@ angular.module('mychat.controllers', [])
                         }
                     });
             }).then(function(){
-                 $ionicModal.fromTemplateUrl('templates/verifyStudentEmail.html', {
-                    scope: $scope
-                }).then(function (modal) {
-                    $scope.modal3 = modal;
-                    $scope.modal3.show();
+                 ref.resetPassword({
+                    email: user.schoolemail
+                }, function(error) {
+                    if (error) {
+                        switch (error.code) {
+                            case "INVALID_USER":
+                                alert("The specified user account does not exist.");
+                                break;
+                            default:
+                                alert("Error:" + error);
+                        }
+                    } else {
+                        alert("An email to your student account has been sent!");
+                        $ionicLoading.hide();
+                        $state.go('login');
+                    }
                 });
               })  
             .catch(function (error) {
