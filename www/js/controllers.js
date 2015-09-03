@@ -76,27 +76,6 @@ angular.module('mychat.controllers', [])
             }
         });
     }
-   
-   /* $scope.verifyStudentEmail = function(enter){
-        ref.resetPassword({
-            email: enter.schoolemail
-            }, function(error) {
-                if (error) {
-                    switch (error.code) {
-                        case "INVALID_USER":
-                            alert("The specified user account does not exist.");
-                            break;
-                        default:
-                            alert("Error:" + error);
-                        }
-                } else {
-                    alert("An email to your student account has been sent!");
-                    $scope.modal3.hide();
-                    $scope.modal3.remove();
-                    $state.go('login');
-                }
-            });
-    }*/
     $scope.createUser = function (user) {
         console.log("Create User Function called");
         if (!!user && !!user.email && !!user.password && !!user.displayname) {
