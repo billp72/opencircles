@@ -102,7 +102,6 @@ angular.module('mychat.services', ['firebase'])
             //console.log("sending message from :" + from.displayName + " & message is " + message);
             
             if (from && message) {
-                $rootScope.$emit('message.sent', from);
                 var chatMessage = {
                     from: from,
                     message: message,
@@ -392,22 +391,166 @@ angular.module('mychat.services', ['firebase'])
         }
     }
 })
-/* check user agent for chrome or safari*/
-/*.service('Browser', ['$window', function($window) {
+/*push factory
+* key: AIzaSyDpA0b2smrKyDUSaP0Cmz9hz4cQ19Rxn7U
+* Project Number: 346007849782
+*/
+.factory('pushService', function ($rootScope, $q, $window, RequestsService, Users) {
+  var 
+    pushNotification = window.plugins.pushNotification,
+    successHandler = function (result) {},
+    errorHandler = function (err){if(err) throw err;},
+    tokenHandler = function (device_token) {
+        RequestsService.pushNote(
+            {'device_token': device_token,
+             'userID': $rootScope.userID,
+             'device_type':'ios',
+             'method':'POST',
+             'path':'register'
+            });
+  };
+  if(!$rootScope.userID){
+        $rootScope.userID = Users.getIDS('userID');
+    }
+  // handle GCM notifications for Android
+  $window.onNotificationGCM = function (event) {
+    switch (event.event) {
+      case 'registered':
+        if (event.regid.length > 0) {
+          // Your GCM push server needs to know the regID before it can push to this device
+          // here is where you might want to send it the regID for later use.
+          var device_token = event.regid;
+          
+          RequestsService.pushNote(
+            {'device_token': device_token,
+             'userID': $rootScope.userID,
+             'device_type':'android',
+             'method':'POST',
+             'path':'register'
+            });
+          //send device reg id to server
 
-     return function() {
+        }
+        break;
 
-         var userAgent = $window.navigator.userAgent;
-
-        var browsers = {chrome: /chrome/i, safari: /safari/i, firefox: /firefox/i, ie: /internet explorer/i};
-
-        for(var key in browsers) {
-            if (browsers[key].test(userAgent)) {
-                return key;
+      case 'message':
+          // if this flag is set, this notification happened while we were in the foreground.
+          // you might want to play a sound to get the user's attention, throw up a dialog, etc.
+          if (event.foreground) {
+                console.log('INLINE NOTIFICATION');
+                //var my_media = new Media("/android_asset/www/" + event.soundname);
+                //my_media.play();
+          } else {
+            if (event.coldstart) {
+                console.log('COLDSTART NOTIFICATION');
+            } else {
+                console.log('BACKGROUND NOTIFICATION');
             }
-       };
+          }
 
-       return 'unknown';
+          navigator.notification.alert(event.payload.message);
+          console.log('MESSAGE -> MSG: ' + event.payload.message);
+          //Only works for GCM
+          console.log('MESSAGE -> MSGCNT: ' + event.payload.msgcnt);
+          //Only works on Amazon Fire OS
+          console.log('MESSAGE -> TIME: ' + event.payload.timeStamp);
+          break;
+
+      case 'error':
+          console.log('ERROR -> MSG:' + event.msg);
+          break;
+
+      default:
+          console.log('EVENT -> Unknown, an event was received and we do not know what it is');
+          break;
+    }
+  };
+  // handle APNS notifications for iOS
+  $window.successIosHandler = function (result) {
+    console.log('result = ' + result);
+    navigator.notification.alert(result);
+  };
+  
+  $window.onNotificationAPN = function (e) {
+    if (e.alert) {
+      console.log('push-notification: ' + e.alert);
+      navigator.notification.alert(e.alert);
     }
 
-}]);*/
+    if (e.sound) {
+      var snd = new Media(e.sound);
+      snd.play();
+    }
+
+    if (e.badge) {
+      pushNotification.setApplicationIconBadgeNumber(successIosHandler, errorHandler, e.badge);
+    }
+  };
+  
+  return {
+    register: function () {
+      var q = $q.defer();
+      if(ionic.Platform.isAndroid()){
+        pushNotification.register(
+            successHandler,
+            errorHandler,
+             {
+                "senderID":"open-circles-1064",
+                "ecb":"window.onNotificationGCM"
+             }
+        );
+      }else{
+        pushNotification.register(
+            tokenHandler,
+            errorHandler,
+             {
+                "badge":"true",
+                "sound":"true",
+                "alert":"true",
+                "ecb":"window.onNotificationAPN"
+            }
+        );
+      }
+      return q.promise;
+    }
+  }
+})
+
+.service('RequestsService', ['$http', '$q', '$ionicLoading',  RequestsService]);
+
+    function RequestsService($http, $q, $ionicLoading){
+
+        var base_url = 'http://aqueous-crag-7054.herokuapp.com';
+
+        function pushNote(device_info){
+
+            //var deferred = $q.defer();
+
+            $ionicLoading.show();
+
+            $http({
+                    method: device_info.method,
+                    url: base_url+'/'+device_info.path, 
+                    data: device_info
+                })
+                .success(function(data, status, headers, config)
+                {
+                    console.log(status + ' - ' + data);
+                    $ionicLoading.hide();
+                })
+                .error(function(data, status, headers, config)
+                {
+                    console.log(status);
+                    $ionicLoading.hide();
+                });
+
+
+            //return deferred.promise;
+
+        };
+
+
+        return {
+            pushNote: pushNote
+        };
+    }

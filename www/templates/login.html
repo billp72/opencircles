@@ -1,35 +1,29 @@
-<ion-view view-title="Open Circles" class="padding bgcolor">
-    <ion-content>
+<ion-view hide-nav-bar="true" class="padding bgcolor">
+<ion-header-bar class="transparent">
+  <button class="button button-clear button-primary" ng-click="openSignIn()">
+      Log In
+    </button>
+    <button class="button button-clear button-primary" ng-click="about()">
+      About
+    </button>
+</ion-header-bar>
+    <ion-content class="padding transparent">
+      <ion-list>
+      <h1 class="hompageTxtTop">OPEN</h1>
+  </ion-list>
         <div class="list">
+            <button ng-click="openModal('student_signup')" class="button button-full button-light button-white">
+                Become A College Advisor
+            </button>
+            <div class="list">
             <img src="img/logo1.png" class="logo">
-        </div>
-        <div class="list card padding bgcolor">
-            <label class="item item-input input-bg">
-                <span class="input-label">Email</span>
-                <input type="text" ng-model="user.email" class="input-bg">
-            </label>
-            <p class="space"></p>
-            <label class="item item-input input-bg">
-                <span class="input-label">Password</span>
-                <input type="password" ng-model="user.pwdForLogin" class="input-bg">
-            </label>
-            <button ng-click="signIn(user)" class="button button-block button-light activated">
-                Sign In
+            </div>
+            <button ng-click="openModal('signup')" class="button button-full button-light button-white">
+                Prospective Student Sign Up
             </button>
         </div>
-        <div class="list" style="text-align:center">
-            <button ng-click="forgotPass()" class="button button-small button-outline button-light">
-                Forgot password
-            </button>
-        </div>
-        <div class="list" style="text-align:center">
-            <div class="sign-up">Sign Up</div>
-            <button ng-click="openModal('student_signup')" class="button button-small button-outline icon-left ion-person-add button-light">
-                Advisor
-            </button>
-            <button ng-click="openModal('signup')" class="button button-small button-outline icon-left ion-person-add button-light">
-                Prospect
-            </button>
-        </div>
+         <ion-list>
+      <h1 class="hompageTxtBottom">CIRCLES</h1>
+  </ion-list>
     </ion-content>
 </ion-view>

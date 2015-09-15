@@ -1,5 +1,5 @@
 [
- {"web_page": "http://www.cooper.edu/", "country": "USA", "domain": "cooper.edu", "name": "Cooper Union"},
- {"web_page": "http://www.nyu.edu/", "country": "USA", "domain": "nyu.edu", "name": "New York University"},
- {"web_page": "http://www.une.edu/", "country": "USA", "domain": "une.edu", "name": "University of New England"}
+ {"schoolContact": "", "country": "USA", "domain": "cooper.edu", "name": "Cooper Union"},
+ {"schoolContact": "", "country": "USA", "domain": "nyu.edu", "name": "New York University"},
+ {"schoolContact": "", "country": "USA", "domain": "une.edu", "name": "University of New England"}
 ]

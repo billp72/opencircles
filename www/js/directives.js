@@ -10,9 +10,15 @@ angular.module('mychat.directives', [])
             var transformedInput = text.substring(0, maxlength);
             ngModelCtrl.$setViewValue(transformedInput);
             ngModelCtrl.$render();
-            return transformedInput;
+            return {
+                'amount': transformedInput.length,
+                'value': transformedInput
+              }
           } 
-          return text;
+          return {
+                'amount': text.length,
+                'value': text
+              }
       }
       ngModelCtrl.$parsers.push(fromUser);
     }

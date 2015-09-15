@@ -24,7 +24,7 @@ function init(){
 // 'mychat.controllers' is found in controllers.js
 angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controllers', 'mychat.services', 'mychat.directives'])
 
-.run(function ($ionicPlatform, $rootScope, $location, $state, Auth, $ionicLoading, $ionicModal, $window) {
+.run(function ($ionicPlatform, $rootScope, $location, $state, Auth, $ionicLoading, $ionicModal, $window, pushService) {
 
     $ionicPlatform.ready(function () {
         $rootScope.advisor   =  !!JSON.parse($window.localStorage.getItem('advisor')) ?
@@ -32,6 +32,10 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         $rootScope.prospect  =  !!JSON.parse($window.localStorage.getItem('prospect')) ?
                 JSON.parse($window.localStorage.getItem('prospect')) : false;
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+         /*Google keys
+          * key: AIzaSyAbXzuAUk1EICCdfpZhoA6-TleQrPWxJuI
+          * Project Number: open-circles-1064/346007849782
+          */
         // for form inputs)
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
