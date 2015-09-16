@@ -476,7 +476,7 @@ angular.module('mychat.services', ['firebase'])
   $window.onNotificationAPN = function (e) {
     if (e.alert) {
       console.log('push-notification: ' + e.alert);
-      navigator.notification.alert(e.alert);
+      //navigator.notification.alert(e.alert);
     }
 
     if (e.sound) {
