@@ -449,8 +449,8 @@ angular.module('mychat.services', ['firebase'])
           }
 
           //navigator.notification.alert(event.payload.message);
-          navigator.notification.vibrate;
-          
+          navigator.notification.vibrate(1000);
+
           console.log('MESSAGE -> MSG: ' + event.payload.message);
           //Only works for GCM
           console.log('MESSAGE -> MSGCNT: ' + event.payload.msgcnt);
