@@ -347,21 +347,22 @@ angular.module('mychat.controllers', [])
         Chats.selectRoom(schoolID, advisorID, advisorKey);
 
 
-    var roomName = Chats.getSelectedRoomName();
+    Chats.getSelectedRoomName(function(roomName){
 
     // Fetching Chat Records only if a Room is Selected
-    if (roomName) {
-        $scope.roomName = " - " + roomName;
-        $scope.chats = Chats.all($scope.displayName);
-        $scope.$watch('chats', function(newValue, oldValue){
-            $timeout(function() {
+        if (roomName) {
+            $scope.roomName = " - " + roomName;
+            $scope.chats = Chats.all($scope.displayName);
+            $scope.$watch('chats', function(newValue, oldValue){
+                $timeout(function() {
                     keepKeyboardOpen();
                     viewScroll.scrollBottom();
-            }, 0);
+                }, 0);
         
-        },true);
+            },true);
             
-    }
+        }
+    });
     $scope.sendMessage = function (msg) {
         if(!firstMessage){
             Chats.send($scope.displayName, schoolID, msg, toggleUserID, toggleQuestionID);
