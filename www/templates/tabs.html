@@ -6,7 +6,7 @@ navigation history that also transitions its views in and out.
 
 <ion-tabs ng-if="advisor" class="tabs-icon-top tabs-color-active-positive">
  <!-- Rooms List Tab -->
-    <ion-tab title="Unanswered" on-select="tabSelected('unanswered')" icon-off="ion-ios7-box-outline" icon-on="ion-ios7-box" href="#/menu/tab/studentrooms">
+    <ion-tab title="Questions" on-select="tabSelected('unanswered')" icon-off="ion-ios7-box-outline" icon-on="ion-ios7-box" href="#/menu/tab/studentrooms">
         <ion-nav-view name="tab-student"></ion-nav-view>
     </ion-tab>
 <!-- Current Selected Chat Tab -->
@@ -28,7 +28,7 @@ navigation history that also transitions its views in and out.
         <ion-nav-view name="tab-ask"></ion-nav-view>
     </ion-tab>
 <!-- Rooms List Tab -->
-    <ion-tab title="Latest" icon-off="ion-ios7-box-outline" icon-on="ion-ios7-box" href="#/menu/tab/rooms">
+    <ion-tab title="Latest" icon-off="ion-ios7-chatboxes-outline" icon-on="ion-ios7-chatboxes" href="#/menu/tab/rooms">
         <ion-nav-view name="tab-rooms"></ion-nav-view>
     </ion-tab>
 <!-- Current Selected Settings Tab -->
