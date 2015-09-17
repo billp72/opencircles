@@ -617,10 +617,10 @@ angular.module('mychat.controllers', [])
                         });
                     });
 
-                    if(data.isChecked){
+                    if(quest.isChecked){
                         var data = {
                                 emailFrom: $scope.email,
-                                schoolContact: data.schoolContact,
+                                schoolContact: quest.schoolContact,
                                 question: quest.question.value
                         };
                         $http({
