@@ -1,5 +1,5 @@
 [
- {"schoolContact": "", "country": "USA", "domain": "cooper.edu", "name": "Cooper Union"},
- {"schoolContact": "", "country": "USA", "domain": "nyu.edu", "name": "New York University"},
- {"schoolContact": "", "country": "USA", "domain": "une.edu", "name": "University of New England"}
+ {"schoolContact": null, "country": "USA", "domain": "cooper.edu", "name": "Cooper Union"},
+ {"schoolContact": null, "country": "USA", "domain": "nyu.edu", "name": "New York University"},
+ {"schoolContact": null, "country": "USA", "domain": "une.edu", "name": "University of New England"}
 ]
