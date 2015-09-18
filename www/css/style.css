@@ -88,3 +88,8 @@ pre{
 .displayname{
     color:#a8a8a8;
 }
+h4.hometxt{
+    font-family: Arial 'Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+    color:#bdbdbd; 
+    text-align:center;
+}
