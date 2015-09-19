@@ -71,7 +71,8 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
     });
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$ionicConfigProvider', 
+    function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     console.log("setting config");
     $ionicConfigProvider.tabs.position('top');
     // Ionic uses AngularUI Router which uses the concept of states
@@ -181,4 +182,4 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
 
-});
+}]);

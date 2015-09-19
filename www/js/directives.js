@@ -1,6 +1,6 @@
 angular.module('mychat.directives', [])
 
-.directive('myMaxlength', function() {
+.directive('myMaxlength', [function() {
   return {
     require: 'ngModel',
     link: function (scope, element, attrs, ngModelCtrl) {
@@ -23,29 +23,7 @@ angular.module('mychat.directives', [])
       ngModelCtrl.$parsers.push(fromUser);
     }
   }; 
-});
-/*.directive('displayText', ['$compile', function ($compile) {
-    
-  return {
-    restrict: 'C', 
-    link: function(scope, elem, attrs) {
-  
-        scope.$watch('rooms', function (){
-            var Qnum=0,
-                Cnum=0;
-            angular.forEach(scope.rooms, function (value, key){
-                if(!value.conversation){
-                    Qnum +=1;     
-                }else{
-                    Cnum +=1;
-                }
-            });
-            scope.message = 'You have '+ Qnum + ' question(s)';
-            scope.message2 = 'You have '+ Cnum + ' conversation(s)';
-        },true);
-        
-    }
-  };
-}])*/
+}]);
+
 
 
