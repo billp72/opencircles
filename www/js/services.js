@@ -352,7 +352,7 @@ angular.module('mychat.services', ['firebase'])
         var schools='';
     
         datas.then(function(data){
-    
+        
            schools = data.data.sort(function(a, b) {
                 
                 var schoolA = a.name.toLowerCase();
@@ -393,8 +393,8 @@ angular.module('mychat.services', ['firebase'])
 }])
 
 .factory('schoolFormData', ['$http', function ($http){
-    var data = $http.get('https://www.netcreative.org/schools/schools_partial.json');
-
+    var data = $http.get('https://www.netcreative.org/schools/schools.php');
+    
     return {
         all: function(){
             return data;
