@@ -2,9 +2,9 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "com.ionicframework.ionicfirebase121384"
+        id        = "com.theopencircles.com..opencircles"
         version   = "1.0.0">
-    
+    <!--com.ionicframework.ionicfirebase121384 -->
     <name>Open Circles</name>
 
     <description>

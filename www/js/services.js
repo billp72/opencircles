@@ -393,7 +393,7 @@ angular.module('mychat.services', ['firebase'])
 }])
 
 .factory('schoolFormData', ['$http', function ($http){
-    var data = $http.get('http://www.netcreative.org/schools/schools_partial.json');
+    var data = $http.get('https://www.netcreative.org/schools/schools_partial.json');
 
     return {
         all: function(){
