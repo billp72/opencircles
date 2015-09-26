@@ -141,7 +141,7 @@ angular.module('mychat.services', ['firebase'])
         },
         get: function (roomID, fn) {
             var rm;
-            rooms.$loaded().then(function(room){//get record doesn't return a promise
+            rooms.$loaded(function(room){//get record doesn't return a promise
                 rm = room.$getRecord(roomID);
                 fn(rm);
             });
@@ -352,7 +352,7 @@ angular.module('mychat.services', ['firebase'])
         var schools='';
     
         datas.then(function(data){
-        
+    
            schools = data.data.sort(function(a, b) {
                 
                 var schoolA = a.name.toLowerCase();
@@ -394,7 +394,7 @@ angular.module('mychat.services', ['firebase'])
 
 .factory('schoolFormData', ['$http', function ($http){
     var data = $http.get('https://www.netcreative.org/schools/schools.php');
-    
+
     return {
         all: function(){
             return data;
@@ -508,7 +508,7 @@ angular.module('mychat.services', ['firebase'])
             successHandler,
             errorHandler,
              {
-                "senderID":"open-circles-1064",
+                "senderID":"346007849782",
                 "ecb":"window.onNotificationGCM"
              }
         );
@@ -537,11 +537,8 @@ angular.module('mychat.services', ['firebase'])
 
         function pushNote(device_info){
 
-            //var deferred = $q.defer();
-
-            $ionicLoading.show();
-
-            $http({
+           if(device_info.method === 'POST'){
+                $http({
                     method: device_info.method,
                     url: base_url+'/'+device_info.path, 
                     data: device_info
@@ -549,17 +546,27 @@ angular.module('mychat.services', ['firebase'])
                 .success(function(data, status, headers, config)
                 {
                     console.log(status + ' - ' + data);
-                    $ionicLoading.hide();
                 })
                 .error(function(data, status, headers, config)
                 {
                     console.log(status);
-                    $ionicLoading.hide();
                 });
 
-
-            //return deferred.promise;
-
+            }else{
+                 $http({
+                    method: device_info.method,
+                    url: base_url+'/'+device_info.path, 
+                    params: {'message': device_info.message, 'userID': device_info.userID}
+                })
+                .success(function(data, status, headers, config)
+                {
+                    console.log(status + ' - ' + data);
+                })
+                .error(function(data, status, headers, config)
+                {
+                    console.log(status);
+                });
+            }
         };
 
 

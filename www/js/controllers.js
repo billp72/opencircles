@@ -250,9 +250,9 @@ angular.module('mychat.controllers', [])
                     }
                     $rootScope.userID = authData.uid;
                     $rootScope.displayName = val.displayName;
-                     /*pushService.register().then(function(token){
+                     pushService.register().then(function(token){
                         console.log("token: ", token);
-                    });*/
+                    });
                     //persist data
                     Users.storeIDS(authData.uid, 'userID');
                     Users.storeIDS(val.displayName, 'displayName');
@@ -367,7 +367,6 @@ angular.module('mychat.controllers', [])
 
 
     Chats.getSelectedRoomName(function(roomName){
-
     // Fetching Chat Records only if a Room is Selected
         if (roomName) {
             $scope.roomName = " - " + roomName;
@@ -436,13 +435,13 @@ angular.module('mychat.controllers', [])
                 })
                         
         }
-        /*RequestsService.pushNote(
+        RequestsService.pushNote(
             {
-             'message':'You have a new Open Circles message from: ' + $scope.displayName,
+             'message':'Message from: ' + $scope.displayName,
              'userID': toggleUserID,
              'method':'GET',
              'path':'push'
-            });*/
+            });
 
     }
 //removes a single chat message
