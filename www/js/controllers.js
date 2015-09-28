@@ -247,7 +247,7 @@ angular.module('mychat.controllers', [])
                         $rootScope.advisor  = false;
                         $rootScope.schoolID = '';
                         $rootScope.email = val.email;
-                        $rootScope.organization = val.organization;
+                        $rootScope.organization = !!val.organization ? val.organization : 'none';
                         //persist data
                         Users.storeIDS(true, 'prospect');
                         Users.removeItem('advisor');
