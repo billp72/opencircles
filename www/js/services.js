@@ -528,7 +528,20 @@ angular.module('mychat.services', ['firebase'])
     }
   }
 }])
-
+.factory('Questions', ['$firebase', function($firebase){
+    var ref = new Firebase(firebaseUrl+'/questions');
+    var questions = $firebase(ref).$asArray();
+    return {
+        save: function (question){
+            questions.$add(
+                {
+                    'organization': question.organization,
+                    'question': question.question
+                }
+            );
+        }
+    }
+}])
 .service('RequestsService', ['$http', '$q', '$ionicLoading',  RequestsService]);
 
     function RequestsService($http, $q, $ionicLoading){

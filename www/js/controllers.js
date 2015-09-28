@@ -104,7 +104,7 @@ angular.module('mychat.controllers', [])
     }
     $scope.createUser = function (user) {
         console.log("Create User Function called");
-        if (!!user && !!user.email && !!user.password && !!user.displayname) {
+        if (!!user && !!user.email && !!user.password && user.password.split('').length>5 && !!user.displayname) {
             $ionicLoading.show({
                 template: 'Signing Up...'
             });
@@ -118,7 +118,8 @@ angular.module('mychat.controllers', [])
                    user:{
                         email: user.email,
                         displayName: user.displayname,
-                        grade: user.grade
+                        grade: user.grade,
+                        organization: user.orginazation
                     }
                 });
                 $ionicLoading.hide();
@@ -242,6 +243,7 @@ angular.module('mychat.controllers', [])
                         $rootScope.advisor  = false;
                         $rootScope.schoolID = '';
                         $rootScope.email = val.email;
+                        $rootScope.organization = val.organization;
                         //persist data
                         Users.storeIDS(true, 'prospect');
                         Users.removeItem('advisor');
@@ -577,8 +579,8 @@ angular.module('mychat.controllers', [])
 /*the prospect can ask a question
 *
 */
-.controller('AskCtrl', ['$scope', '$state', 'Users', 'Rooms', 'SchoolDataService', 'stripDot', '$ionicLoading', '$http', 
-    function($scope, $state, Users, Rooms, SchoolDataService, stripDot, $ionicLoading, $http){
+.controller('AskCtrl', ['$scope', '$state', 'Users', 'Rooms', 'SchoolDataService', 'stripDot', '$ionicLoading', '$http', 'Questions',
+    function($scope, $state, Users, Rooms, SchoolDataService, stripDot, $ionicLoading, $http, Questions){
     var icon='';
     if(!$scope.userID){
         $scope.userID = Users.getIDS('userID');
@@ -658,6 +660,7 @@ angular.module('mychat.controllers', [])
                             console.log('error');
                         });
                     } 
+                    Questions.save({question: quest.question.value, organization: $scope.organization});
                 }else{
                     alert('questions must be at least 15 characters long');
                 }
