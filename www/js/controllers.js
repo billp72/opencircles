@@ -104,10 +104,11 @@ angular.module('mychat.controllers', [])
     }
     $scope.createUser = function (user) {
         console.log("Create User Function called");
-        if (!!user && !!user.email && !!user.password && user.password.split('').length>5 && !!user.displayname) {
-            $ionicLoading.show({
-                template: 'Signing Up...'
-            });
+        if (!!user && !!user.email && !!user.password && !!user.displayname && !!user.organization) {
+            if(user.password.split('').length>5){
+                $ionicLoading.show({
+                    template: 'Signing Up...'
+                });
 
             auth.$createUser({
                 email: user.email,
@@ -119,7 +120,7 @@ angular.module('mychat.controllers', [])
                         email: user.email,
                         displayName: user.displayname,
                         grade: user.grade,
-                        organization: user.orginazation
+                        organization: user.organization
                     }
                 });
                 $ionicLoading.hide();
@@ -129,6 +130,9 @@ angular.module('mychat.controllers', [])
                 alert("Error: " + error);
                 $ionicLoading.hide();
             });
+            }else{
+                alert("Your password must be at least 6 characters");
+            }
         } else{
             alert("Please fill all details");
         }
@@ -659,8 +663,12 @@ angular.module('mychat.controllers', [])
                         {
                             console.log('error');
                         });
-                    } 
-                    Questions.save({question: quest.question.value, organization: $scope.organization});
+                    }
+                    Questions.save({
+                        question: quest.question.value, 
+                        organization: $scope.organization, 
+                        school: quest.schoolID.schoolname
+                    }); 
                 }else{
                     alert('questions must be at least 15 characters long');
                 }

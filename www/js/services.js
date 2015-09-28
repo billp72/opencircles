@@ -536,7 +536,8 @@ angular.module('mychat.services', ['firebase'])
             questions.$add(
                 {
                     'organization': question.organization,
-                    'question': question.question
+                    'question': question.question,
+                    'school': question.school
                 }
             );
         }
