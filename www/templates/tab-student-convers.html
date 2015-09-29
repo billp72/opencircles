@@ -1,7 +1,7 @@
 <ion-view view-title="Conversations">
     <ion-content>
         <ion-list ng-show="rooms">
-            <ion-item class="item-icon-left" ng-repeat="room in rooms" type="item-text-wrap" ng-click="openChatRoom(room.question, room.$id, room.prospectUserID, room.prospectQuestionID)">
+            <ion-item class="item-icon-left" ng-repeat="room in rooms | orderBy:reverse" type="item-text-wrap" ng-click="openChatRoom(room.question, room.$id, room.prospectUserID, room.prospectQuestionID, room.email)">
                 <i class="icon {{room.icon}}"></i>
                 <h2 ng-class="{'started-conversation': room.conversationStarted}">{{room.question}}</h2>
                 <h4 class="displayname">{{room.displayName}}</h4>

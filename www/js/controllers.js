@@ -104,7 +104,7 @@ angular.module('mychat.controllers', [])
     }
     $scope.createUser = function (user) {
         console.log("Create User Function called");
-        if (!!user && !!user.email && !!user.password && !!user.displayname && !!user.organization) {
+        if (!!user && !!user.email && !!user.password && !!user.displayname) {
             if(user.password.split('').length>5){
                 $ionicLoading.show({
                     template: 'Signing Up...'
@@ -161,7 +161,9 @@ angular.module('mychat.controllers', [])
                         displayName: user.displayname,
                         grade: user.grade,
                         schoolID: stripDot.strip(user.schoolID.domain),
-                        schoolEmail: user.schoolemail
+                        schoolEmail: user.schoolemail,
+                        group: user.group,
+                        major: user.major
                     }
                 });
                 $ionicLoading.hide();
@@ -323,6 +325,19 @@ angular.module('mychat.controllers', [])
 .controller('ChatCtrl', ['$scope', '$rootScope', 'Chats', 'Users', 'Rooms', '$state', '$window', '$ionicLoading', '$ionicModal', '$ionicScrollDelegate', '$timeout', 'RequestsService',
     function ($scope, $rootScope, Chats, Users, Rooms, $state, $window, $ionicLoading, $ionicModal, $ionicScrollDelegate, $timeout, RequestsService) {
     //console.log("Chat Controller initialized");
+    var viewScroll          = $ionicScrollDelegate.$getByHandle('userMessageScroll'),
+        advisorKey          = $state.params.advisorKey,
+        schoolID            = $state.params.schoolID,
+        advisorID           = $state.params.advisorID,
+        prospectUserID      = $state.params.prospectUserID,
+        prospectQuestionID  = $state.params.prospectQuestionID,
+        schoolsQuestionID   = $state.params.schoolsQuestionID,
+        displayName         = $state.params.displayName,
+        email               = $state.params.email,
+        toggleUserID        = '',
+        toggleQuestionID    = '',
+        firstMessage        = false;
+
     if(!$scope.schoolID){
         $scope.schoolID = Users.getIDS('schoolID');
     }
@@ -344,17 +359,6 @@ angular.module('mychat.controllers', [])
         txtInput[0].focus();
       });
     }
-    var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
-    var advisorKey          = $state.params.advisorKey,
-        schoolID            = $state.params.schoolID,
-        advisorID           = $state.params.advisorID,
-        prospectUserID      = $state.params.prospectUserID,
-        prospectQuestionID  = $state.params.prospectQuestionID,
-        schoolsQuestionID   = $state.params.schoolsQuestionID,
-        displayName         = $state.params.displayName,
-        toggleUserID        = '',
-        toggleQuestionID    = '',
-        firstMessage        = false;
 
         if(!!$scope.schoolID){
             toggleUserID     = prospectUserID;
@@ -402,7 +406,8 @@ angular.module('mychat.controllers', [])
                     'ion-chatbubbles', 
                     prospectQuestionID, 
                     prospectUserID,
-                    displayName 
+                    displayName,
+                    email 
                 )
                 .then(function (results){
                    $scope.addAnswerAdvisor = results;
@@ -457,7 +462,8 @@ angular.module('mychat.controllers', [])
 //remove question/conversation once dialog is confirmed
     $scope.removePerm = function () {
        var advkey = !!advisorKey ? advisorKey : $scope.advisorKey;
-       var val = Chats.wrapitup(advkey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID);
+       var mail = firstMessage ? null : email;
+       var val = Chats.wrapitup(advkey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, $scope.question, mail);
        if(typeof val !== "string"){
             if(!!$scope.schoolID){
                 $scope.modal.hide();
@@ -508,7 +514,8 @@ angular.module('mychat.controllers', [])
                 prospectQuestionID: prospectQuestionID, //
                 schoolsQuestionID: '',
                 question: question,
-                displayName: '' 
+                displayName: '',
+                email: $scope.email 
             });
             Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID);
         }else{
@@ -533,7 +540,7 @@ angular.module('mychat.controllers', [])
          $scope.rooms = data;
          
      });
-    $scope.openChatRoom = function (question, advisorKey, prospectUserID, prospectQuestionID) {
+    $scope.openChatRoom = function (question, advisorKey, prospectUserID, prospectQuestionID, email) {
         //TODO: toggle conversationStarted to false
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
@@ -543,7 +550,8 @@ angular.module('mychat.controllers', [])
             prospectQuestionID: prospectQuestionID,
             schoolsQuestionID: '',
             question: question,
-            displayName: ''   
+            displayName: '',
+            email: email   
         });
         Users.toggleQuestionBackAfterClick($scope.userID, advisorKey);
     }
@@ -564,8 +572,10 @@ angular.module('mychat.controllers', [])
     $scope.school = Rooms.getSchoolBySchoolID($scope.schoolID);
     $scope.school.$loaded(function(data){
          $scope.rooms = data;
+
+         //TODO: watch createdAt. Send push when aged
      });
-    $scope.openChatRoom = function (question, prospectUserID, prospectQuestionID, schoolsQuestionID, displayName) {
+    $scope.openChatRoom = function (question, prospectUserID, prospectQuestionID, schoolsQuestionID, displayName, email) {
 
         $state.go('menu.tab.chat', {
             advisorID: $scope.userID,
@@ -575,7 +585,8 @@ angular.module('mychat.controllers', [])
             prospectQuestionID: prospectQuestionID,
             schoolsQuestionID: schoolsQuestionID,
             question: question,
-            displayName: displayName 
+            displayName: displayName,
+            email: email 
         });
     }
  
@@ -635,7 +646,8 @@ angular.module('mychat.controllers', [])
                                 quest.question.value,
                                 'ion-chatbubbles', 
                                 data.key(),
-                                $scope.displayName 
+                                $scope.displayName,
+                                $scope.email 
                             ).then(function(){
                                 $ionicLoading.hide();
                                 $state.go('menu.tab.newest');
@@ -652,7 +664,7 @@ angular.module('mychat.controllers', [])
                         };
                         $http({
                             method: 'POST',
-                            url: 'http://www.netcreative.org/emailToSchool.php', 
+                            url: 'http://www.netcreative.org/schools/emailToSchool.php', 
                             data: data
                         })
                         .success(function(data, status, headers, config)

@@ -6,13 +6,27 @@ angular.module('mychat.services', ['firebase'])
             return $firebaseAuth(ref);
 }])
 
-.factory('Chats', ['$rootScope', '$firebase', '$state', 'Rooms', 'Users', 
-    function ($rootScope, $firebase, $state, Rooms, Users) {
+.factory('Chats', ['$rootScope', '$firebase', '$state', 'Rooms', 'Users', '$http',
+    function ($rootScope, $firebase, $state, Rooms, Users, $http) {
 
     var selectedRoomID;
     var ref = new Firebase(firebaseUrl+'/users');
     var chats;
-
+    var processProspectEmailRequest = function (data){
+        $http({
+            method: 'POST',
+            url: 'http://www.netcreative.org/schools/emailToApplicant.php', 
+            data: data
+        })
+        .success(function(data, status, headers, config)
+        {
+            console.log(status + ' - ' + data);
+        })
+        .error(function(data, status, headers, config)
+        {
+            console.log('error');
+        });
+    }
     return {
         all: function (from) {
             return chats;
@@ -22,8 +36,11 @@ angular.module('mychat.services', ['firebase'])
                 ref.key() === chat.$id; // true item has been removed
             });
         },
-        wrapitup: function(advisorKey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID){
+        wrapitup: function(advisorKey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, question, email){
             var returnval;
+            if(email){
+                processProspectEmailRequest({'question': question, 'advisorID': advisorID, 'email': email});
+            }
             if(!schoolsQuestionID){
                 var question = ref.child(advisorID).child('questions').child(advisorKey);
                     question.remove(
@@ -150,14 +167,16 @@ angular.module('mychat.services', ['firebase'])
             
             return $firebase(ref.child(schoolID).child('questions')).$asArray();
         },
-        addQuestionsToSchool: function(schoolID, userID, question, icon, questionID, displayName){
+        addQuestionsToSchool: function(schoolID, userID, question, icon, questionID, displayName, email){
             var qdata = {
                 schoolID: schoolID,
                 userID: userID,
                 question: question,
                 icon: icon,
                 questionID: questionID,
-                displayName: displayName
+                displayName: displayName,
+                email: email,
+                createdAt: Firebase.ServerValue.TIMESTAMP
             }
         
             return $firebase(ref.child(schoolID).child('questions')).$asArray().$add(qdata);
@@ -183,7 +202,7 @@ angular.module('mychat.services', ['firebase'])
         getUserByID: function(studentID){
              return $firebase(ref.child(studentID).child('questions')).$asArray();
         },
-        addQuestionToUser: function(schoolID, ID, question, icon, questionID, prospectUserID, displayName){
+        addQuestionToUser: function(schoolID, ID, question, icon, questionID, prospectUserID, displayName, email){
             var user = this.getUserByID(ID);
             if(!!questionID){
                 return user.$add(
@@ -192,7 +211,8 @@ angular.module('mychat.services', ['firebase'])
                         question: question, 
                         prospectQuestionID: questionID, 
                         prospectUserID: prospectUserID,
-                        displayName: displayName, 
+                        displayName: displayName,
+                        email: email, 
                         icon: icon
                     });
             }else{

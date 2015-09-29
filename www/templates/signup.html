@@ -1,6 +1,6 @@
 <ion-modal-view>
     <ion-header-bar class="bar bar-header bar-positive">
-        <h1 class="title">Create Prospect Account</h1>
+        <h1 class="title">Create Applicant Account</h1>
         <button class="button button-clear button-primary" ng-click="modal1.hide()">Cancel</button>
     </ion-header-bar>
     <ion-content class="padding">
@@ -19,7 +19,11 @@
             </label>
             <label class="item item-input">
                 <span class="input-label">School/Org</span>
-                <input ng-model="user.organization" type="text">
+                <input ng-model="user.organization" type="text" placeholder="exp: Gov. Livingston HS">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Club/Interest</span>
+                <input ng-model="user.club" type="text" placeholder="exp: track team">
             </label>
             <label class="item item-input item-select">
                 <div class="input-label">
