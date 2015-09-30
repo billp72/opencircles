@@ -15,7 +15,7 @@ angular.module('mychat.services', ['firebase'])
     var processProspectEmailRequest = function (data){
         $http({
             method: 'POST',
-            url: 'http://www.netcreative.org/schools/emailToApplicant.php', 
+            url: 'http://www.theopencircles.com/opencircles/emailToApplicant.php', 
             data: data
         })
         .success(function(data, status, headers, config)
@@ -413,7 +413,7 @@ angular.module('mychat.services', ['firebase'])
 }])
 
 .factory('schoolFormData', ['$http', function ($http){
-    var data = $http.get('https://www.netcreative.org/schools/schools.php');
+    var data = $http.get('http://www.theopencircles.com/opencircles/schools.php');
 
     return {
         all: function(){

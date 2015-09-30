@@ -695,7 +695,7 @@ angular.module('mychat.controllers', [])
                         };
                         $http({
                             method: 'POST',
-                            url: 'http://www.netcreative.org/schools/emailToSchool.php', 
+                            url: 'http://www.theopencircles.com/opencircles/emailToSchool.php', 
                             data: data
                         })
                         .success(function(data, status, headers, config)
