@@ -61,12 +61,11 @@ angular.module('mychat.controllers', [])
                 $scope.user.schoolID = matches[0];
                 $scope.data.list = matches;
                 $scope.user.schoolemail = '@'+$scope.user.schoolID.domain;
-
                 var textBox = document.getElementById('schoolemail');
                     moveCaretToStart(textBox);
                     $window.setTimeout(function() {
                         moveCaretToStart(textBox);
-                    }, 1); 
+                    }, 1);
             }
         )
     }
@@ -202,7 +201,7 @@ angular.module('mychat.controllers', [])
                         var room = ref.child("schools").child(stripDot.strip(user.schoolID.domain));
                         room.set({
                             icon: "ion-university",
-                            schoolname: user.schoolID.name,
+                            schoolname: user.schoolID.value,
                             schoolID: stripDot.strip(user.schoolID.domain),
                             schoolEmail: user.schoolID.schoolContact,
                             ID: room.key()
