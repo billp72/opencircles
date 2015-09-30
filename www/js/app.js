@@ -29,7 +29,14 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
 .run(function ($ionicPlatform, $rootScope, $location, $state, Auth, $ionicLoading, $ionicModal, $window, pushService) {
 
     $ionicPlatform.ready(function () {
-
+         //localstorage check
+        $window.localStorage.setItem('test', 'test');
+        if($window.localStorage.getItem('test') !== null){
+            $window.localStorage.removeItem('test');
+            }else{
+                alert('you must activate local storage to use this app');
+                $location.path("/login");
+            }
         $rootScope.advisor   =  !!JSON.parse($window.localStorage.getItem('advisor')) ?
                 JSON.parse($window.localStorage.getItem('advisor')) : false;
         $rootScope.prospect  =  !!JSON.parse($window.localStorage.getItem('prospect')) ?
@@ -55,14 +62,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
 
         Auth.$onAuth(function (authData) {
             if (authData) {
-                //localstorage check
-                $window.localStorage.setItem('test', 'test');
-                if($window.localStorage.getItem('test') !== null){
-                    $window.localStorage.removeItem('test');
-                }else{
-                    alert('you must activate local storage to use this app');
-                    $location.path("/login");
-                }
+               
             } else {
                 console.log("Logged out");
                 $ionicLoading.hide();
