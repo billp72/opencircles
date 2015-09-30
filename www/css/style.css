@@ -93,3 +93,6 @@ h4.hometxt{
     color:#bdbdbd; 
     text-align:center;
 }
+#schoolemail:focus{
+    background-color: lightblue;
+};
