@@ -325,7 +325,7 @@ angular.module('mychat.controllers', [])
 .controller('ChatCtrl', ['$scope', '$rootScope', 'Chats', 'Users', 'Rooms', '$state', '$window', '$ionicLoading', '$ionicModal', '$ionicScrollDelegate', '$timeout', 'RequestsService',
     function ($scope, $rootScope, Chats, Users, Rooms, $state, $window, $ionicLoading, $ionicModal, $ionicScrollDelegate, $timeout, RequestsService) {
     //console.log("Chat Controller initialized");
-    var viewScroll          = $ionicScrollDelegate.$getByHandle('userMessageScroll'),
+    var 
         advisorKey          = $state.params.advisorKey,
         schoolID            = $state.params.schoolID,
         advisorID           = $state.params.advisorID,
@@ -351,7 +351,10 @@ angular.module('mychat.controllers', [])
     $timeout(function(){
         footerBar = document.body.querySelector('#userMessagesView .bar-footer');
         txtInput = angular.element(footerBar.querySelector('input'));
-    },0)
+    },0);
+    
+    var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
+
     function keepKeyboardOpen() {
       //console.log('keepKeyboardOpen');
       txtInput.one('blur', function() {
