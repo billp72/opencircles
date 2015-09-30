@@ -494,7 +494,7 @@ angular.module('mychat.controllers', [])
     $scope.removePerm = function () {
        var advkey = !!advisorKey ? advisorKey : $scope.advisorKey;
        var mail = firstMessage ? null : email;
-       var val = Chats.wrapitup(advkey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, $scope.question, mail, $scope.userID);
+       var val = Chats.wrapitup(advkey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, $scope.question, mail, prospectUserID);
        if(typeof val !== "string"){
             if(!!$scope.schoolID){
                 $scope.modal.hide();
