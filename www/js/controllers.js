@@ -14,6 +14,7 @@ angular.module('mychat.controllers', [])
     'schoolFormDataService', 
     'stripDot',
     'pushService',
+    '$window',
     function (
     $scope, 
     $ionicModal, 
@@ -27,7 +28,8 @@ angular.module('mychat.controllers', [])
     SchoolDataService, 
     schoolFormDataService, 
     stripDot,
-    pushService) {
+    pushService,
+    $window) {
     //console.log('Login Controller Initialized');
 
     var ref = new Firebase($scope.firebaseUrl);
@@ -51,8 +53,23 @@ angular.module('mychat.controllers', [])
             $ionicHistory.clearCache();
             $ionicHistory.clearHistory();
     });
+    function moveCaretToStart(el) {
+        if (typeof el.selectionStart == "number") {
+            el.selectionStart = el.selectionEnd = 0;
+        } else if (typeof el.createTextRange != "undefined") {
+            el.focus();
+            var range = el.createTextRange();
+            range.collapse(true);
+            range.select();
+        }
+    }
     $scope.update = function(school){
-        $scope.user.schoolemail = '@'+school.domain;
+        $scope.user.schoolemail = '@'+school.domain; 
+        var textBox = document.getElementById('schoolemail');
+        moveCaretToStart(textBox);
+        $window.setTimeout(function() {
+                moveCaretToStart(textBox);
+        }, 1);    
     }
     function emailDomain(email){
         var tolower = email.toLowerCase();
@@ -352,9 +369,7 @@ angular.module('mychat.controllers', [])
         footerBar = document.body.querySelector('#userMessagesView .bar-footer');
         txtInput = angular.element(footerBar.querySelector('input'));
     },0);
-    
     var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
-
     function keepKeyboardOpen() {
       //console.log('keepKeyboardOpen');
       txtInput.one('blur', function() {
