@@ -35,24 +35,14 @@ angular.module('mychat.controllers', [])
     var ref = new Firebase($scope.firebaseUrl);
     var auth = $firebaseAuth(ref);
 
-    $scope.user = {};
-    $scope.data = { "list" : '', "search" : ''};
-   
-
-    $scope.search = function() {
-
-        schoolFormDataService.schoolList($scope.data.search).then(
-            function(matches) {
-                $scope.user.schoolID = matches[0];
-                $scope.data.list = matches;
-                $scope.user.schoolemail = '@'+$scope.user.schoolID.domain;
-            }
-        )
-    }
     $scope.$on('$ionicView.enter', function(){
             $ionicHistory.clearCache();
             $ionicHistory.clearHistory();
     });
+
+    $scope.user = {};
+    $scope.data = { "list" : '', "search" : ''};
+    
     function moveCaretToStart(el) {
         if (typeof el.selectionStart == "number") {
             el.selectionStart = el.selectionEnd = 0;
@@ -63,13 +53,31 @@ angular.module('mychat.controllers', [])
             range.select();
         }
     }
+
+    $scope.search = function() {
+
+        schoolFormDataService.schoolList($scope.data.search).then(
+            function(matches) {
+                $scope.user.schoolID = matches[0];
+                $scope.data.list = matches;
+                $scope.user.schoolemail = '@'+$scope.user.schoolID.domain;
+
+                var textBox = document.getElementById('schoolemail');
+                    moveCaretToStart(textBox);
+                    $window.setTimeout(function() {
+                        moveCaretToStart(textBox);
+                    }, 1); 
+            }
+        )
+    }
+    
     $scope.update = function(school){
-        $scope.user.schoolemail = '@'+school.domain; 
+        $scope.user.schoolemail = '@'+school.domain;
         var textBox = document.getElementById('schoolemail');
-        moveCaretToStart(textBox);
-        $window.setTimeout(function() {
-                moveCaretToStart(textBox);
-        }, 1);    
+            moveCaretToStart(textBox);
+            $window.setTimeout(function() {
+                    moveCaretToStart(textBox);
+            }, 1);    
     }
     function emailDomain(email){
         var tolower = email.toLowerCase();
