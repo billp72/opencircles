@@ -247,18 +247,24 @@ angular.module('mychat.controllers', [])
                 });
     }
     $scope.signIn = function (user) {
+        $window.localStorage.setItem('test', 'test');
+        if($window.localStorage.getItem('test') === null){
+             alert('you must activate local storage to use this app');
+            $scope.modal.hide();           
+        }else{
+            $window.localStorage.removeItem('test');
         
-        if (user && user.email && user.pwdForLogin) {
-            $ionicLoading.show({
-                template: 'Signing In...'
-            });
-            auth.$authWithPassword({
-                email: user.email,
-                password: user.pwdForLogin
-            }).then(function (authData) {
-                console.log("Logged in as:" + authData.uid);
-                ref.child("users").child(authData.uid+'/user').once('value', function (snapshot) {
-                    var val = snapshot.val();
+            if (user && user.email && user.pwdForLogin) {
+                $ionicLoading.show({
+                    template: 'Signing In...'
+                });
+                auth.$authWithPassword({
+                    email: user.email,
+                    password: user.pwdForLogin
+                }).then(function (authData) {
+                    console.log("Logged in as:" + authData.uid);
+                    ref.child("users").child(authData.uid+'/user').once('value', function (snapshot) {
+                        var val = snapshot.val();
     
                     if(!!val.schoolID){
                         $rootScope.advisor    = true;
@@ -289,7 +295,6 @@ angular.module('mychat.controllers', [])
                     Users.storeIDS(authData.uid, 'userID');
                     Users.storeIDS(val.displayName, 'displayName');
                 
-                    $ionicLoading.hide();
                     $scope.modal.hide();
                     
                     if(!!val.schoolID){
@@ -297,17 +302,18 @@ angular.module('mychat.controllers', [])
                     }else{
                         $state.go('menu.tab.ask');
                     }
-                    
+                    $ionicLoading.hide();  
                 });
                 
             }).catch(function (error) {
                 alert("Authentication failed:" + error.message);
                 $ionicLoading.hide();
             });
-        } else
+        } else{
             alert("Please enter email and password both");
-    }
-    
+        }
+      }
+    }   
 }])
 /*
 * end Loginctrl
@@ -488,7 +494,7 @@ angular.module('mychat.controllers', [])
     $scope.removePerm = function () {
        var advkey = !!advisorKey ? advisorKey : $scope.advisorKey;
        var mail = firstMessage ? null : email;
-       var val = Chats.wrapitup(advkey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, $scope.question, mail);
+       var val = Chats.wrapitup(advkey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, $scope.question, mail, $scope.userID);
        if(typeof val !== "string"){
             if(!!$scope.schoolID){
                 $scope.modal.hide();

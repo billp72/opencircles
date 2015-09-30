@@ -36,10 +36,10 @@ angular.module('mychat.services', ['firebase'])
                 ref.key() === chat.$id; // true item has been removed
             });
         },
-        wrapitup: function(advisorKey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, question, email){
+        wrapitup: function(advisorKey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, question, email, userID){
             var returnval;
             if(email){
-                processProspectEmailRequest({'question': question, 'advisorID': advisorID, 'email': email});
+                processProspectEmailRequest({'question': question, 'advisorID': advisorID, 'email': email, 'userID': userID});
             }
             if(!schoolsQuestionID){
                 var question = ref.child(advisorID).child('questions').child(advisorKey);
