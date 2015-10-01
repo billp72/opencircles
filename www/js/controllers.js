@@ -294,7 +294,7 @@ angular.module('mychat.controllers', [])
                     //persist data
                     Users.storeIDS(authData.uid, 'userID');
                     Users.storeIDS(val.displayName, 'displayName');
-                
+                    $scope.startTimer();
                     $scope.modal.hide();
                     
                     if(!!val.schoolID){
@@ -343,6 +343,7 @@ angular.module('mychat.controllers', [])
             });
 
             Auth.$unauth();
+            $scope.stopTimer();
     }
        
     $scope.runChangePassword = function(user){
