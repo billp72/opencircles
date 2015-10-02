@@ -249,7 +249,7 @@ angular.module('mychat.controllers', [])
     $scope.signIn = function (user) {
         $window.localStorage.setItem('test', 'test');
         if($window.localStorage.getItem('test') === null){
-             alert('you must activate local storage to use this app');
+             alert('You must activate local storage on your device to use this app');
             $scope.modal.hide();           
         }else{
             $window.localStorage.removeItem('test');
