@@ -1,4 +1,7 @@
-<ion-view view-title="Questions">
+<ion-view view-title="Questions for {{title1}}">
+<ion-nav-title>
+           Questions for {{title1}}
+        </ion-nav-title>
     <ion-content>
         <ion-list ng-show="rooms" class="display-text">
             <ion-item class="item-icon-left" ng-repeat="room in rooms | orderBy:reverse" type="item-text-wrap" ng-click="openChatRoom(room.question, room.userID, room.questionID, room.$id, room.displayName, room.email)">

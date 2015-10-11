@@ -3,6 +3,12 @@
 var firebaseUrl = "https://incandescent-torch-5679.firebaseio.com";
 
 function onDeviceReady() {
+    setTimeout(function() { 
+
+        navigator.splashscreen.hide(); 
+
+    }, 3000);
+    
     angular.bootstrap(document, ["mychat"]);
 }
 //console.log("binding device ready");
@@ -24,7 +30,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 // 'mychat.services' is found in services.js
 // 'mychat.controllers' is found in controllers.js
-angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controllers', 'mychat.services', 'mychat.directives'])
+angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controllers', 'mychat.services', 'mychat.directives', 'mychat.autocomplete'])
 
 .run(function ($ionicPlatform, $rootScope, $location, $state, Auth, $ionicLoading, $ionicModal, $window, pushService, $interval) {
 

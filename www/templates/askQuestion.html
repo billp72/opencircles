@@ -1,4 +1,4 @@
-<ion-view view-title="Ask Questions">
+<ion-view view-title="Ask Questions - {{user.question.amount}} of 100">
     <ion-header-bar class="bar bar-header bar-positive">
         <h1 class="title">Ask Question</h1>
         <button class="button button-clear button-primary" ng-click="modal1.hide()">Cancel</button>
@@ -16,9 +16,19 @@
                 <select ng-model="user.schoolID" ng-options="select.schoolname for select in data.list" ng-change="update(user.schoolID)">
                 </select>
             </label>
-             <ion-item>{{user.question.amount}} of 100</ion-item>
             <label class="item item-input">
-                <textarea my-maxlength="100" row="100" name="comment" id="comment-textarea" class="no-resize" ng-model="user.question" placeHolder="min of 15 characters..."></textarea>
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="search" placeholder="Group name - left empty is general" ng-change="searchg()" ng-model="data.groups">
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Select Group
+                </div>
+                <select ng-model="user.group" ng-options="select.groupName for select in data.listg">
+                </select>
+            </label>
+            <label class="item item-input">
+                <textarea my-maxlength="100" row="80" name="comment" id="comment-textarea" class="no-resize" ng-model="user.question" placeHolder="min of 15 characters..."></textarea>
             </label>
             <ion-checkbox ng-show="hasEmail" ng-model="user.ischecked">Send question to school</ion-checkbox>
         </div>

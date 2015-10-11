@@ -163,11 +163,11 @@ angular.module('mychat.services', ['firebase'])
                 fn(rm);
             });
         },
-        getSchoolBySchoolID: function(schoolID){
+        getSchoolBySchoolID: function(schoolID, groupID){
             
-            return $firebase(ref.child(schoolID).child('questions')).$asArray();
+            return $firebase(ref.child(schoolID).child('questions').child(groupID)).$asArray();
         },
-        addQuestionsToSchool: function(schoolID, userID, question, icon, questionID, displayName, email){
+        addQuestionsToSchool: function(schoolID, userID, question, icon, questionID, displayName, email, groupID, groupName){
             var qdata = {
                 schoolID: schoolID,
                 userID: userID,
@@ -176,10 +176,11 @@ angular.module('mychat.services', ['firebase'])
                 questionID: questionID,
                 displayName: displayName,
                 email: email,
+                groupName: groupName,
                 createdAt: Firebase.ServerValue.TIMESTAMP
             }
         
-            return $firebase(ref.child(schoolID).child('questions')).$asArray().$add(qdata);
+            return $firebase(ref.child(schoolID).child('questions').child(groupID)).$asArray().$add(qdata);
            
         },
          retrieveSingleQuestion: function (schoolID, questionID) {
@@ -249,10 +250,10 @@ angular.module('mychat.services', ['firebase'])
                 };
             return user.$add(chatMessage);
        },
-       updateProspectQuestion: function (studentID, questionID, advisorID, advisorKey, originalID, schoolID){
+       updateProspectQuestion: function (studentID, questionID, advisorID, advisorKey, originalID, schoolID, groupID){
             var update = ref.child(studentID).child('questions').child(questionID);
                 update.update({advisorID: advisorID, advisorKey: advisorKey, conversationStarted: true});
-                Rooms.getRef().child(schoolID).child('questions').child(originalID).remove(
+                Rooms.getRef().child(schoolID).child('questions').child(groupID).child(originalID).remove(
                     function(err){
                         if(err){
                             alert('an error occured ' + err);
@@ -305,122 +306,7 @@ angular.module('mychat.services', ['firebase'])
             }
         }
 }])
-/*
-* autocomplete search
-*/
-.factory('SchoolDataService', ['$q', '$timeout', 'schoolData', function ($q, $timeout, schoolData) {
-        var datas = schoolData.all();
-        var schools='';
-        datas.$loaded(function(data){
-            schools = data.sort(function(a, b) {
 
-                var schoolA = a.schoolname.toLowerCase();
-                var schoolB = b.schoolname.toLowerCase();
-
-                if(schoolA > schoolB) return 1;
-                if(schoolA < schoolB) return -1;
-
-                return 0;
-            });
-        });
-            var searchSchool = function(searchFilter) {    
-            //console.log('Searching school for ' + searchFilter);
-            var deferred = $q.defer();
-
-            var matches = schools.filter( function(school) {
-                if(school.schoolname.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ) return true;
-            })
-
-            $timeout( function(){
-        
-                deferred.resolve( matches );
-
-            }, 100);
-
-            return deferred.promise;
-
-        };
-
-    return {
-
-        searchSchools : searchSchool
-
-    }
-}])
-/*
-*get school data
-*/
-.factory('schoolData', ['$firebase', function ($firebase){
-
-    var ref = new Firebase(firebaseUrl+'/schools');
-    var schools = $firebase(ref).$asArray();
-
-    return{
-        all: function(){
-            return schools
-        }
-    }
-     
-}])
-/*
-* this is to populate the form with schools when the user is creating an account
-*/
-.factory('schoolFormDataService', ['$q', '$timeout', 'schoolFormData', 
-    function ($q, $timeout, schoolFormData){
-
-    var datas = schoolFormData.all();
-        var schools='';
-    
-        datas.then(function(data){
-    
-           schools = data.data.sort(function(a, b) {
-                
-                var schoolA = a.name.toLowerCase();
-                var schoolB = b.name.toLowerCase();
-
-                if(schoolA > schoolB) return 1;
-                if(schoolA < schoolB) return -1;
-
-                return 0;
-            });
-        
-       });
-       var schoolList = function(searchFilter) {
-         
-            //console.log('Searching school for ' + searchFilter);
-
-            var deferred = $q.defer();
-
-            var matches = schools.filter( function(school) {
-                if(school.name.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ) return true;
-            })
-
-            $timeout( function(){
-        
-                deferred.resolve( matches );
-
-            }, 100);
-
-            return deferred.promise;
-
-        };
-
-    return {
-
-        schoolList : schoolList
-
-    }
-}])
-
-.factory('schoolFormData', ['$http', function ($http){
-    var data = $http.get('http://www.theopencircles.com/opencircles/schools.php');
-
-    return {
-        all: function(){
-            return data;
-        }
-    }
-}])
 /*push factory
 * key: AIzaSyDpA0b2smrKyDUSaP0Cmz9hz4cQ19Rxn7U
 * Project Number: 346007849782

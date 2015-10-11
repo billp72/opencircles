@@ -168,7 +168,7 @@ angular.module('mychat.controllers', [])
             !!user.schoolemail &&
             !!user.displayname && 
             !!user.schoolID &&
-             user.schoolID.domain === emailDomain(user.schoolemail)[0] 
+             user.schoolID.domain === emailDomain(user.schoolemail)[0]
              ) 
         {
           
@@ -267,13 +267,16 @@ angular.module('mychat.controllers', [])
                         var val = snapshot.val();
     
                     if(!!val.schoolID){
+                        var groupID    = !!val.groupID ? val.groupID : 'gen';
                         $rootScope.advisor    = true;
                         $rootScope.prospect   = false;
                         $rootScope.schoolID   = val.schoolID;
+                        $rootScope.group = groupID;
                         //persist data
                         Users.storeIDS(true, 'advisor');
                         Users.removeItem('prospect');
                         Users.storeIDS(val.schoolID, 'schoolID');
+                        Users.storeIDS(groupID, 'groupID');
                     }else{
                         $rootScope.prospect = true;
                         $rootScope.advisor  = false;
@@ -284,6 +287,7 @@ angular.module('mychat.controllers', [])
                         Users.storeIDS(true, 'prospect');
                         Users.removeItem('advisor');
                         Users.removeItem('schoolID');
+                        Users.removeItem('groupID');
 
                     }
                     $rootScope.userID = authData.uid;
@@ -323,10 +327,26 @@ angular.module('mychat.controllers', [])
         $rootScope.tabs = select;
     }
 }])
-.controller('SettingsCtrl', ['$scope', 'Users', 'ChangePassword', '$state', '$ionicLoading', '$ionicModal', 'Auth',
-    function ($scope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth) {
+.controller('SettingsCtrl', ['$scope', '$rootScope','Users', 'ChangePassword', '$state', '$ionicLoading', '$ionicModal', 'Auth', 'groupsMentorsDataService',
+    function ($scope, $rootScope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth, groupsMentorsDataService) {
     console.log('settings initialized');
+    $scope.user = {}
+    $scope.data = { 'list' : '', 'groups' : ''};
 
+    $scope.searchg = function() {
+        groupsMentorsDataService.searchSchools($scope.data.groups).then(
+            function(matches) {
+                $scope.user.group = matches[0];
+                $scope.data.list = matches;  
+                $rootScope.group = matches[0].$id;
+                console.log($rootScope.group);     
+            }
+        )
+    }
+    $scope.update = function (data){
+        console.log(data);
+        $rootScope.group = data.$id;
+    }
     $scope.deleteAccount = function(){
                 $ionicModal.fromTemplateUrl('templates/delete-account.html', {
                     scope: $scope
@@ -391,7 +411,15 @@ angular.module('mychat.controllers', [])
         txtInput[0].focus();
       });
     }
-
+    $scope.$watch('group', function(oldValue, newValue){
+        var val;
+        if(!!oldValue){
+            val = oldValue;
+        }else{
+            val = newValue;
+        }
+        $scope.changeGroupID = val; 
+    });
         if(!!$scope.schoolID){
             toggleUserID     = prospectUserID;
             toggleQuestionID = prospectQuestionID;
@@ -460,7 +488,8 @@ angular.module('mychat.controllers', [])
                         advisorID, 
                         $scope.advisorKey,
                         schoolsQuestionID,
-                        schoolID
+                        schoolID,
+                        $scope.changeGroupID
                     )
                             
                 })
@@ -601,12 +630,23 @@ angular.module('mychat.controllers', [])
     if(!$scope.schoolID){
         $scope.schoolID = Users.getIDS('schoolID');
     }
-    $scope.school = Rooms.getSchoolBySchoolID($scope.schoolID);
-    $scope.school.$loaded(function(data){
-         $scope.rooms = data;
-
-         //TODO: watch createdAt. Send push when aged
-     });
+    if(!$scope.group){
+        $scope.group = Users.getIDS('groupID');
+    }
+    $scope.$watch('group', function(oldValue, newValue){
+        var val;
+        if(!!oldValue){
+            val = oldValue;
+        }else{
+            val = newValue;
+        }
+        $scope.title1 = val;
+        $scope.school = Rooms.getSchoolBySchoolID($scope.schoolID, val);
+            $scope.school.$loaded(function(data){
+                $scope.rooms = data;
+        });  
+    });
+    
     $scope.openChatRoom = function (question, prospectUserID, prospectQuestionID, schoolsQuestionID, displayName, email) {
 
         $state.go('menu.tab.chat', {
@@ -626,9 +666,11 @@ angular.module('mychat.controllers', [])
 /*the prospect can ask a question
 *
 */
-.controller('AskCtrl', ['$scope', '$state', 'Users', 'Rooms', 'SchoolDataService', 'stripDot', '$ionicLoading', '$http', 'Questions',
-    function($scope, $state, Users, Rooms, SchoolDataService, stripDot, $ionicLoading, $http, Questions){
-    var icon='';
+.controller('AskCtrl', ['$scope', '$state', 'Users', 'Rooms', 'SchoolDataService', 'groupsFormDataService','stripDot', '$ionicLoading', '$http', 'Questions',
+    function($scope, $state, Users, Rooms, SchoolDataService, groupsFormDataService, stripDot, $ionicLoading, $http, Questions){
+    var icon='',
+        grpID,
+        grpName;
     if(!$scope.userID){
         $scope.userID = Users.getIDS('userID');
     }
@@ -637,7 +679,7 @@ angular.module('mychat.controllers', [])
     }
 
     $scope.user = {}
-    $scope.data = { 'list' : '', 'search' : ''};
+    $scope.data = { 'list' : '', 'search' : '', 'groups': '', 'listg':''};
 
     $scope.search = function() {
 
@@ -658,12 +700,30 @@ angular.module('mychat.controllers', [])
             $scope.hasEmail = true;
         } 
     }
+   $scope.searchg = function() {
+
+        groupsFormDataService.groupList($scope.data.groups).then(
+            function(matches) {
+                $scope.user.group = matches[0];
+                $scope.data.listg = matches;
+                
+            }
+        )
+    }
     $scope.ask = function (quest){
+        if(!quest.group){
+              grpID   = 'gen',
+              grpName = 'general';
+        }else{
+              grpID = quest.group.groupID;
+              grpName = quest.group.groupName;
+        }
             if(!!quest.schoolID){
                 if(quest.question.amount >= 15){
                     $ionicLoading.show({
                         template: 'Sending...'
                     });
+                
                      Users.addQuestionToUser(
                             quest.schoolID.schoolID, 
                             $scope.userID, 
@@ -679,7 +739,9 @@ angular.module('mychat.controllers', [])
                                 'ion-chatbubbles', 
                                 data.key(),
                                 $scope.displayName,
-                                $scope.email 
+                                $scope.email,
+                                grpID,
+                                grpName 
                             ).then(function(){
                                 $ionicLoading.hide();
                                 $state.go('menu.tab.newest');

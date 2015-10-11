@@ -4,7 +4,20 @@
        
     </ion-header-bar>
     <ion-content class="padding">
-        <div class="list">
+        <div ng-if="advisor" class="list">
+            <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="search" placeholder="Search Group" ng-change="searchg()" ng-model="data.groups">
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Select Group
+                </div>
+                <select ng-model="user.group" ng-options="select.$id for select in data.list" ng-change="update(user.group)">
+                </select>
+           </label>
+        </div>
+        <div class="list"> 
             <label class="item item-input">
                 <span class="input-label">Enter Email</span>
                 <input ng-model="enter.schoolemail" type="text">
