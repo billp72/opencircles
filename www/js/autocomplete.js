@@ -64,11 +64,11 @@ angular.module('mychat.autocomplete', ['firebase'])
         var datas = groupsMentorData.getGroupByID(Users.getIDS('schoolID'));
         var schools='';
         datas.$loaded(function(data){
-
+            console.log(data);
             schools = data.sort(function(a, b) {
 
-                var schoolA = a.$id.toLowerCase();
-                var schoolB = b.$id.toLowerCase();
+                var schoolA = a.name.groupName.toLowerCase();
+                var schoolB = b.name.groupName.toLowerCase();
 
                 if(schoolA > schoolB) return 1;
                 if(schoolA < schoolB) return -1;
@@ -76,11 +76,11 @@ angular.module('mychat.autocomplete', ['firebase'])
                 return 0;
             });
         });
-            var searchSchool = function(searchFilter) {    
+        var searchSchool = function(searchFilter) {    
             //console.log('Searching school for ' + searchFilter);
             var deferred = $q.defer();
             var matches = schools.filter( function(school) {
-                if(school.$id.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ) return true;
+                if(school.name.groupName.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ) return true;
             })
 
             $timeout( function(){

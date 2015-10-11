@@ -267,7 +267,7 @@ angular.module('mychat.controllers', [])
                         var val = snapshot.val();
     
                     if(!!val.schoolID){
-                        var groupID    = !!val.groupID ? val.groupID : 'gen';
+                        var groupID    = !!val.groupID ? {'groupID':val.groupID, 'title':val.title} : {'groupID': 'gen', 'title':'General'};
                         $rootScope.advisor    = true;
                         $rootScope.prospect   = false;
                         $rootScope.schoolID   = val.schoolID;
@@ -337,9 +337,13 @@ angular.module('mychat.controllers', [])
         groupsMentorsDataService.searchSchools($scope.data.groups).then(
             function(matches) {
                 $scope.user.group = matches[0];
-                $scope.data.list = matches;  
-                $rootScope.group = matches[0].$id;
-                console.log($rootScope.group);     
+                $scope.data.list = matches; 
+                $rootScope.group = {
+                    'groupID': matches[0].$id,
+                    'title': matches[0].name.groupName
+                }
+              console.log(matches[0].question);
+                //console.log($rootScope.group);     
             }
         )
     }
@@ -385,6 +389,7 @@ angular.module('mychat.controllers', [])
         schoolsQuestionID   = $state.params.schoolsQuestionID,
         displayName         = $state.params.displayName,
         email               = $state.params.email,
+        group               = $state.params.group,
         toggleUserID        = '',
         toggleQuestionID    = '',
         firstMessage        = false;
@@ -411,15 +416,7 @@ angular.module('mychat.controllers', [])
         txtInput[0].focus();
       });
     }
-    $scope.$watch('group', function(oldValue, newValue){
-        var val;
-        if(!!oldValue){
-            val = oldValue;
-        }else{
-            val = newValue;
-        }
-        $scope.changeGroupID = val; 
-    });
+    
         if(!!$scope.schoolID){
             toggleUserID     = prospectUserID;
             toggleQuestionID = prospectQuestionID;
@@ -489,7 +486,7 @@ angular.module('mychat.controllers', [])
                         $scope.advisorKey,
                         schoolsQuestionID,
                         schoolID,
-                        $scope.changeGroupID
+                        group 
                     )
                             
                 })
@@ -576,7 +573,8 @@ angular.module('mychat.controllers', [])
                 schoolsQuestionID: '',
                 question: question,
                 displayName: '',
-                email: $scope.email 
+                email: $scope.email,
+                group: '' 
             });
             Users.toggleQuestionBackAfterClick($scope.userID, prospectQuestionID);
         }else{
@@ -612,7 +610,8 @@ angular.module('mychat.controllers', [])
             schoolsQuestionID: '',
             question: question,
             displayName: '',
-            email: email   
+            email: email,
+            group: ''   
         });
         Users.toggleQuestionBackAfterClick($scope.userID, advisorKey);
     }
@@ -630,8 +629,9 @@ angular.module('mychat.controllers', [])
     if(!$scope.schoolID){
         $scope.schoolID = Users.getIDS('schoolID');
     }
+    console.log("local storage: ", Users.getIDS('groupID').groupID);
     if(!$scope.group){
-        $scope.group = Users.getIDS('groupID');
+        $scope.groupID = Users.getIDS('groupID').groupID;
     }
     $scope.$watch('group', function(oldValue, newValue){
         var val;
@@ -640,8 +640,9 @@ angular.module('mychat.controllers', [])
         }else{
             val = newValue;
         }
-        $scope.title1 = val;
-        $scope.school = Rooms.getSchoolBySchoolID($scope.schoolID, val);
+        $scope.groupID = val.groupID;
+        $scope.title1 = val.title;
+        $scope.school = Rooms.getSchoolBySchoolID($scope.schoolID, $scope.groupID);
             $scope.school.$loaded(function(data){
                 $scope.rooms = data;
         });  
@@ -658,7 +659,8 @@ angular.module('mychat.controllers', [])
             schoolsQuestionID: schoolsQuestionID,
             question: question,
             displayName: displayName,
-            email: email 
+            email: email,
+            group: $scope.groupID
         });
     }
  

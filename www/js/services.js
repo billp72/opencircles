@@ -176,11 +176,21 @@ angular.module('mychat.services', ['firebase'])
                 questionID: questionID,
                 displayName: displayName,
                 email: email,
-                groupName: groupName,
+                groupID: groupID,
                 createdAt: Firebase.ServerValue.TIMESTAMP
             }
         
-            return $firebase(ref.child(schoolID).child('questions').child(groupID)).$asArray().$add(qdata);
+            return $firebase(ref.child(schoolID).child('questions').child(groupID)).$asArray().$add(qdata)
+                .then(function(){
+                    var notSync = $firebase.extend({
+                            name: {
+                                groupName: groupName
+                            }
+                    })
+                    var add = ref.child(schoolID).child('questions').child(groupID);
+
+                    return new notSync(add);
+                });
            
         },
          retrieveSingleQuestion: function (schoolID, questionID) {
