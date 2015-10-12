@@ -36,7 +36,7 @@ angular.module('mychat.services', ['firebase'])
                 ref.key() === chat.$id; // true item has been removed
             });
         },
-        wrapitup: function(advisorKey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, question, email, userID){
+        wrapitup: function(advisorKey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, question, email, userID, groupID){
             var returnval;
             if(email){
                 processProspectEmailRequest({'question': question, 'advisorID': advisorID, 'email': email, 'userID': userID});
@@ -64,12 +64,17 @@ angular.module('mychat.services', ['firebase'])
                         }
                     );
             }else{
-                 var question = Rooms.getRef().child(schoolID).child('questions').child(schoolsQuestionID);
+                 var question = Rooms.getRef().child(schoolID).child('questions').child(groupID).child(schoolsQuestionID);
                     question.remove(
                         function (err){
                             if(err){
                                 returnval = 'there was an error deleting' + err;
                             }else{
+                                //remove groupName property when all questions have been wrapped up
+                                var groupName = $firebase(Rooms.getRef().child(schoolID).child('questions').child(groupID)).$asArray();
+                                if(groupName.length === 1){
+                                    Rooms.getRef().child(schoolID).child('questions').child(groupID).child('groupName').remove()
+                                }
                                 questionProspect = ref.child(prospectUserID).child('questions').child(prospectQuestionID);
                                 questionProspect.remove(
                                     function (err){

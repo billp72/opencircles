@@ -554,7 +554,17 @@ setting for applicant
     $scope.removePerm = function () {
        var advkey = !!advisorKey ? advisorKey : $scope.advisorKey;
        var mail = firstMessage ? null : email;
-       var val = Chats.wrapitup(advkey, advisorID, schoolID, schoolsQuestionID, prospectQuestionID, prospectUserID, $scope.question, mail, prospectUserID);
+       var val = Chats.wrapitup(advkey, 
+                                advisorID, 
+                                schoolID, 
+                                schoolsQuestionID, 
+                                prospectQuestionID, 
+                                prospectUserID, 
+                                $scope.question,
+                                mail, 
+                                prospectUserID,
+                                group
+                            );
        if(typeof val !== "string"){
             if(!!$scope.schoolID){
                 $scope.modal.hide();
