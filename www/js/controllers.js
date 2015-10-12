@@ -327,30 +327,63 @@ angular.module('mychat.controllers', [])
         $rootScope.tabs = select;
     }
 }])
-.controller('SettingsCtrl', ['$scope', '$rootScope','Users', 'ChangePassword', '$state', '$ionicLoading', '$ionicModal', 'Auth', 'groupsMentorsDataService',
+/*
+settings for mentor
+*/
+.controller('SettingsCtrlMentor', ['$scope', '$rootScope','Users', 'ChangePassword', '$state', '$ionicLoading', '$ionicModal', 'Auth', 'groupsMentorsDataService',
     function ($scope, $rootScope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth, groupsMentorsDataService) {
-    console.log('settings initialized');
-    $scope.user = {}
-    $scope.data = { 'list' : '', 'groups' : ''};
+    console.log('settings mentor initialized');
+        $scope.user = {}
+        $scope.data = { 'list' : '', 'groups' : ''};
 
-    $scope.searchg = function() {
-        groupsMentorsDataService.searchSchools($scope.data.groups).then(
-            function(matches) {
-                $scope.user.group = matches[0];
-                $scope.data.list = matches; 
-                $rootScope.group = {
-                    'groupID': matches[0].$id,
-                    'title': matches[0].name.groupName
-                }
-              console.log(matches[0].question);
+        $scope.searchg = function() {
+            groupsMentorsDataService.searchSchools($scope.data.groups).then(
+                function(matches) {
+                    $scope.user.group = matches[0];
+                    $scope.data.list = matches; 
+                    $rootScope.group = {
+                        'groupID': matches[0].$id,
+                        'title': matches[0].groupName
+                    }
                 //console.log($rootScope.group);     
-            }
-        )
+                }
+            )
+        }
+        $scope.update = function (data){
+            console.log(data);
+            $rootScope.group = data.$id;
+        }
+ 
+    $scope.deleteAccount = function(){
+                $ionicModal.fromTemplateUrl('templates/delete-account.html', {
+                    scope: $scope
+                }).then(function (modal) {
+                    $scope.modal = modal;
+                    $scope.modal.show();
+                });
+        }
+
+    $scope.logout = function () {
+            console.log("Logging out from the app");
+            $ionicLoading.show({
+                template: 'Logging Out...'
+            });
+
+            Auth.$unauth();
+            $scope.stopTimer();
     }
-    $scope.update = function (data){
-        console.log(data);
-        $rootScope.group = data.$id;
+       
+    $scope.runChangePassword = function(user){
+            ChangePassword.change(user);
     }
+}])
+/*
+setting for applicant
+*/
+.controller('SettingsCtrl', ['$scope', '$rootScope','Users', 'ChangePassword', '$state', '$ionicLoading', '$ionicModal', 'Auth',
+    function ($scope, $rootScope, Users, ChangePassword, $state, $ionicLoading, $ionicModal, Auth) {
+    console.log('settings initialized');
+    
     $scope.deleteAccount = function(){
                 $ionicModal.fromTemplateUrl('templates/delete-account.html', {
                     scope: $scope
@@ -629,7 +662,6 @@ angular.module('mychat.controllers', [])
     if(!$scope.schoolID){
         $scope.schoolID = Users.getIDS('schoolID');
     }
-    console.log("local storage: ", Users.getIDS('groupID').groupID);
     if(!$scope.group){
         $scope.groupID = Users.getIDS('groupID').groupID;
     }
