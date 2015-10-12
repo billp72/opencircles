@@ -262,9 +262,13 @@ angular.module('mychat.services', ['firebase'])
                             alert('an error occured ' + err);
                         }
                         var len = $firebase(Rooms.getRef().child(schoolID).child('questions').child(groupID)).$asArray;
-                        if(len.length === 1){
-                            Rooms.getRef().child(schoolID).child('questions').child(groupID).child('groupName').remove();
-                        }
+                            len.$loaded(function(data){
+                                if(data.length === 1){
+                                    Rooms.getRef().child(schoolID).child('questions').child(groupID).child('groupName').remove();
+                                }
+
+                            })
+                       
                     }
                 )
         
