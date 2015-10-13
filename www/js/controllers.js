@@ -186,7 +186,6 @@ angular.module('mychat.controllers', [])
                         grade: user.grade,
                         schoolID: stripDot.strip(user.schoolID.domain),
                         schoolEmail: user.schoolemail,
-                        group: user.group,
                         major: user.major
                     }
                 });
