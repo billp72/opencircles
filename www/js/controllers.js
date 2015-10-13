@@ -266,7 +266,7 @@ angular.module('mychat.controllers', [])
                         var val = snapshot.val();
     
                     if(!!val.schoolID){
-                        var groupID    = !!val.groupID ? {'groupID':val.groupID, 'title':val.title} : {'groupID': 'gen', 'title':'General'};
+                        var groupID    = !!val.groupID ? {'groupID':val.groupID, 'groupName':val.groupName} : {'groupID': 'gen', 'groupName':'General'};
                         $rootScope.advisor    = true;
                         $rootScope.prospect   = false;
                         $rootScope.schoolID   = val.schoolID;
@@ -342,15 +342,17 @@ settings for mentor
                     $scope.data.list = matches; 
                     $rootScope.group = {
                         'groupID': matches[0].$id,
-                        'title': matches[0].groupName
+                        'groupName': matches[0].groupName
                     }
                 //console.log($rootScope.group);     
                 }
             )
         }
         $scope.update = function (data){
-            console.log(data);
-            $rootScope.group = data.$id;
+            $rootScope.group = {
+                'groupID': data.$id,
+                'groupName': data.groupName
+            }
         }
  
     $scope.deleteAccount = function(){
@@ -682,11 +684,12 @@ setting for applicant
             val = newValue;
         }
         $scope.groupID = val.groupID;
-        $scope.title1 = val.title;
+        $scope.title1 = val.groupName;
         $scope.school = Rooms.getSchoolBySchoolID($scope.schoolID, $scope.groupID);
             $scope.school.$loaded(function(data){
                 $scope.rooms = data;
-        });  
+        });
+        Users.updateUserGroup(val.groupID, val.groupName, $scope.userID);  
     });
     
     $scope.openChatRoom = function (question, prospectUserID, prospectQuestionID, schoolsQuestionID, displayName, email) {

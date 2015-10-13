@@ -235,6 +235,9 @@ angular.module('mychat.services', ['firebase'])
                     });
             }
         },
+        updateUserGroup: function (groupID, groupName, userID){
+            ref.child(userID).child('user').update({'groupID': groupID, 'groupName': groupName});
+        },
         getUserConversation: function (userID, questionID){
             return $firebase(ref.child(userID).child('questions').child(questionID).child('conversations')).$asArray();
         },

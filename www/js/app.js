@@ -44,7 +44,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
                         $window.localStorage.removeItem('test');
                     }else{
                         Auth.$unauth();
-                        alert('You must activate local storage on your device to use this app');
+                        alert('Memory warning. close other applications then log back in.');
                         $rootScope.stopTimer();
                     }
                 //console.log('interval hit');
