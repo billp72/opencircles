@@ -245,6 +245,14 @@ angular.module('mychat.controllers', [])
                     $scope.modal.show();
                 });
     }
+    $scope.about = function (){
+        $ionicModal.fromTemplateUrl('templates/about.html', {
+                    scope: $scope
+                }).then(function (modal) {
+                    $scope.modal_about = modal;
+                    $scope.modal_about.show();
+                });
+    }
     $scope.signIn = function (user) {
         $window.localStorage.setItem('test', 'test');
         if($window.localStorage.getItem('test') === null){
