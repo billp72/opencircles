@@ -32,36 +32,10 @@ document.addEventListener("deviceready", onDeviceReady, false);
 // 'mychat.controllers' is found in controllers.js
 angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controllers', 'mychat.services', 'mychat.directives', 'mychat.autocomplete'])
 
-.run(function ($ionicPlatform, $rootScope, $location, $state, Auth, $ionicLoading, $ionicModal, $window, pushService, $interval) {
+.run(function ($ionicPlatform, $rootScope, $location, $state, Auth, $ionicLoading, $ionicModal, $window, pushService) {
 
     $ionicPlatform.ready(function () {
          //localstorage check
-       var stop;
-       $rootScope.startTimer = function(){
-            stop = $interval(function(){
-                $window.localStorage.setItem('test', 'test');
-                    if($window.localStorage.getItem('test') !== null){
-                        $window.localStorage.removeItem('test');
-                    }else{
-                        Auth.$unauth();
-                        alert('Memory warning. close other applications then log back in.');
-                        $rootScope.stopTimer();
-                    }
-                //console.log('interval hit');
-            },300000);
-        }
-
-        $rootScope.stopTimer = function() {
-          if (angular.isDefined(stop)) {
-                $interval.cancel(stop);
-                stop = undefined;
-          }
-        };
-
-        $rootScope.$on('$destroy', function() {
-          // Make sure that the interval is destroyed too
-          $rootScope.stopTimer();
-        });
 
         $rootScope.advisor   =  !!JSON.parse($window.localStorage.getItem('advisor')) ?
                 JSON.parse($window.localStorage.getItem('advisor')) : false;
@@ -87,9 +61,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         $rootScope.displayName = null;
 
         Auth.$onAuth(function (authData) {
-            if (authData) {
-               
-            } else {
+            if (!authData) {
                 console.log("Logged out");
                 $ionicLoading.hide();
                 $location.path('/login');
