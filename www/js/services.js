@@ -201,7 +201,7 @@ angular.module('mychat.services', ['firebase'])
 /**
  * simple service to get all the users for a room or in the db
 */
-.factory('Users', ['$firebase', '$window', 'Rooms', function ($firebase, $window, Rooms) {
+.factory('Users', ['$firebase', '$q','$timeout', '$window', 'Rooms', 'RequestsService', function ($firebase, $q, $timeout, $window, Rooms, RequestsService) {
     // Might use a resource here that returns a JSON array
     var ref = new Firebase(firebaseUrl+'/users');
     var users = $firebase(ref).$asArray();
@@ -284,6 +284,49 @@ angular.module('mychat.services', ['firebase'])
        toggleQuestionBackAfterClick: function (toggleUserID, toggleQuestionID){
              ref.child(toggleUserID).child('questions').child(toggleQuestionID)
                         .update({'conversationStarted':false});
+       },
+       getGroupKeys: function (){
+            var deferred = $q.defer();
+            //console.log(groupID, schoolID);
+            var keys = [];
+            ref.orderByKey().on("child_added", function(snapshot) {
+                //console.log(snapshot.key());
+                keys.push(snapshot.key());
+            
+                $timeout( function(){
+        
+                    deferred.resolve( keys );
+
+                }, 100);
+                    
+            });
+            return deferred.promise;
+       },
+       sendPushByGroup: function (arr, groupID, schoolID, groupName){
+            var i=0;
+        //var stop = $interval(function(){
+            for(i; i<arr.length; i++){
+         
+                ref.child(arr[i]).child('user').once('value'
+                    ,function(snapshot2){
+                          var key,
+                              school = snapshot2.val().schoolID,
+                              group = snapshot2.val().groupID;
+                        
+                        if(school === schoolID && groupID === group){
+                            var ref = snapshot2.ref();
+                            var key = ref.parent().key();
+                            RequestsService.pushNote(
+                            {
+                                'message':'Your group '+groupName+' has a new question',
+                                'userID': key,
+                                'method':'GET',
+                                'path':'push'
+                            });
+                        }
+
+                    });
+            }
        }
     }
 }])
@@ -468,6 +511,31 @@ angular.module('mychat.services', ['firebase'])
         }
     }
 }])
+/*.service('sendMultiPush', ['$http', '$q', '$ionicLoading',  MultiService]);
+    function MultiService($http, $q, $ionicLoading){
+        function httpService(list, msg){
+            var i=0,
+            var len = list.length;
+            for(i;i<len;i++){
+                $http({
+                    method: 'GET',
+                    url: base_url+'/push',
+                    params: {'message': msg, 'userID': list[i]}
+                })
+                .success(function(data, status, headers, config)
+                {
+                    console.log(status + ' - ' + data);
+                })
+                .error(function(data, status, headers, config)
+                {
+                    console.log(status);
+                });
+            }
+        }
+        return {
+            httpService: httpService
+        }
+    }*/
 .service('RequestsService', ['$http', '$q', '$ionicLoading',  RequestsService]);
 
     function RequestsService($http, $q, $ionicLoading){

@@ -203,6 +203,7 @@ angular.module('mychat.controllers', [])
                             schoolname: user.schoolID.value,
                             schoolID: stripDot.strip(user.schoolID.domain),
                             schoolEmail: user.schoolID.schoolContact,
+                            category: user.schoolID.category,
                             ID: room.key()
                         },function(err){
                             if(err) throw err;
@@ -721,7 +722,7 @@ setting for applicant
 *
 */
 .controller('AskCtrl', ['$scope', '$state', 'Users', 'Rooms', 'SchoolDataService', 'groupsFormDataService','stripDot', '$ionicLoading', '$http', 'Questions',
-    function($scope, $state, Users, Rooms, SchoolDataService, groupsFormDataService, stripDot, $ionicLoading, $http, Questions){
+    function ($scope, $state, Users, Rooms, SchoolDataService, groupsFormDataService, stripDot, $ionicLoading, $http, Questions){
     var icon='',
         grpID,
         grpName;
@@ -741,7 +742,7 @@ setting for applicant
             function(matches) {
                 $scope.user.schoolID = matches[0];
                 $scope.data.list = matches;
-                if(!!$scope.user.schoolID.schoolContact){
+                if(!!$scope.user.schoolID && $scope.user.schoolID.schoolContact !== undefined){
                     $scope.hasEmail = true;
                 }
                 
@@ -755,7 +756,6 @@ setting for applicant
         } 
     }
    $scope.searchg = function() {
-
         groupsFormDataService.groupList($scope.data.groups).then(
             function(matches) {
                 $scope.user.group = matches[0];
@@ -764,14 +764,28 @@ setting for applicant
             }
         )
     }
-    $scope.ask = function (quest){
-        if(!quest.group){
-              grpID   = 'gen',
-              grpName = 'general';
-        }else{
-              grpID = quest.group.groupID;
-              grpName = quest.group.groupName;
+    $scope.updateg = function (data){
+        if(!!$scope.user.schoolID && $scope.user.schoolID.category !== data.category){
+            if(data.category !== 'g'){
+                if($scope.user.schoolID.schoolname !== undefined){
+                    alert('this group cannot be linked to '+ $scope.user.schoolID.schoolname);
+                }
+            }
         }
+    }
+    $scope.ask = function (quest){         
+          if(!quest.group && !quest.group.groupID){
+                alert('please select a group');
+                return;
+          }
+          if(quest.group.category !== quest.schoolID.category){
+             if(quest.group.category !== 'g'){
+                alert('this group cannot be linked to '+ quest.schoolID.schoolname);
+                return;
+             }
+          }
+          grpID = quest.group.groupID;
+          grpName = quest.group.groupName;
             if(!!quest.schoolID){
                 if(quest.question.amount >= 15){
                     $ionicLoading.show({
@@ -829,6 +843,11 @@ setting for applicant
                         organization: $scope.organization, 
                         school: quest.schoolID.schoolname
                     }); 
+                    var keys = Users.getGroupKeys().
+                            then(function(data){
+                                Users.sendPushByGroup(data, grpID, quest.schoolID.schoolID, grpName);
+                            });
+
                 }else{
                     alert('questions must be at least 15 characters long');
                 }
