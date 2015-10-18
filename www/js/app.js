@@ -181,7 +181,7 @@ angular.module('mychat', ['ionic', 'firebase', 'angularMoment', 'mychat.controll
         url: '/settingsMentor',
         views: {
             'tab-settingsMentor': {
-                templateUrl: 'templates/tab-settings.html',
+                templateUrl: 'templates/tab-groups.html',
                 controller: 'SettingsCtrlMentor'
             }
         }

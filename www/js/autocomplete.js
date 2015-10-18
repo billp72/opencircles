@@ -58,61 +58,6 @@ angular.module('mychat.autocomplete', ['firebase'])
      
 }])
 /*
-* autocomplete search for groups mentors
-*/
-.factory('groupsMentorsDataService', ['$q', '$timeout', 'groupsMentorData', 'Users', function ($q, $timeout, groupsMentorData, Users) {
-        var datas = groupsMentorData.getGroupByID(Users.getIDS('schoolID'));
-        var schools='';
-        datas.$loaded(function(data){
-            schools = data.sort(function(a, b) {
-                console.log('factory: ', a);
-                var schoolA = a.groupName.toLowerCase();
-                var schoolB = b.groupName.toLowerCase();
-
-                if(schoolA > schoolB) return 1;
-                if(schoolA < schoolB) return -1;
-
-                return 0;
-            });
-        });
-        var searchSchool = function(searchFilter) {    
-            //console.log('Searching school for ' + searchFilter);
-            var deferred = $q.defer();
-            var matches = schools.filter( function(school) {
-                if(school.groupName.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ) return true;
-            })
-
-            $timeout( function(){
-        
-                deferred.resolve( matches );
-
-            }, 100);
-
-            return deferred.promise;
-
-        };
-
-    return {
-
-        searchSchools : searchSchool
-
-    }
-}])
-/*
-*get school data
-*/
-.factory('groupsMentorData', ['$firebase', function ($firebase){
-
-    var ref = new Firebase(firebaseUrl+'/schools');
-
-    return{
-        getGroupByID: function (schoolID){
-            return $firebase(ref.child(schoolID).child('questions')).$asArray();
-        }
-    }
-     
-}])
-/*
 * this is to populate the form with schools when the user is creating an account
 */
 .factory('schoolFormDataService', ['$q', '$timeout', 'schoolFormData', 
@@ -172,17 +117,15 @@ angular.module('mychat.autocomplete', ['firebase'])
     }
 }])
 /*
-* this is to populate the form with groups when the user is asking a question
+* FOR ALL GROUP SEARCHES
+* this is for mentors to choose a group
 */
-.factory('groupsFormDataService', ['$q', '$timeout', 'schoolGroupData', 
-    function ($q, $timeout, schoolGroupData){
-
-    var datas = schoolGroupData.all();
-    var schools='';
-    
-        datas.then(function(data){
-           schools = data.data.sort(function(a, b) {
-    
+.factory('groupsMentorsDataService', ['$q', '$timeout', 'groupsMentorData', 'Users', 
+    function ($q, $timeout, groupsMentorData, Users) {
+        var schools='';
+        groupsMentorData.getGroupByID(Users.getIDS('schoolID'), function(data){
+            schools = data.sort(function(a, b) {
+                console.log('factory: ', a);
                 var schoolA = a.groupName.toLowerCase();
                 var schoolB = b.groupName.toLowerCase();
 
@@ -191,14 +134,10 @@ angular.module('mychat.autocomplete', ['firebase'])
 
                 return 0;
             });
-        
-       });
-       var groupList = function(searchFilter) {
-         
+        });
+        var searchSchool = function(searchFilter) {    
             //console.log('Searching school for ' + searchFilter);
-
             var deferred = $q.defer();
-
             var matches = schools.filter( function(school) {
                 if(school.groupName.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ) return true;
             })
@@ -215,15 +154,83 @@ angular.module('mychat.autocomplete', ['firebase'])
 
     return {
 
-        groupList: groupList
+        searchSchools : searchSchool
 
     }
 }])
-.factory('schoolGroupData', ['$http', function ($http){
-    var data = $http.get('http://www.theopencircles.com/opencircles/groups.php');
-    return {
-        all: function(){
-            return data;
+
+/*
+* this is to populate the form with groups when the user is asking a question
+
+*/
+.factory('groupsFormDataService', ['$q', '$timeout', 'groupsMentorData', 'Users',
+    function ($q, $timeout, groupsMentorData, Users){
+        var schools='';
+        var retrieveDataSort = function(schoolID){
+                groupsMentorData.getGroupByID(schoolID, function(data){
+                    schools = data.sort(function(a, b) {
+
+                        var schoolA = a.groupName.toLowerCase();
+                        var schoolB = b.groupName.toLowerCase();
+
+                        if(schoolA > schoolB) return 1;
+                        if(schoolA < schoolB) return -1;
+
+                        return 0;
+                });
+            });
+        }
+        var groupList = function(searchFilter) {  
+            //console.log('Searching school for ' + searchFilter);
+            var deferred = $q.defer();
+            var matches = schools.filter( function(school) {
+                if(school.groupName.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ) return true;
+            })
+
+            $timeout( function(){
+                deferred.resolve( matches );
+
+            }, 100);
+
+            return deferred.promise;
+
+        };
+
+        return {
+
+            groupList: groupList,
+            retrieveDataSort: retrieveDataSort
+
+        }
+}])
+/*
+*get school data
+*/
+.factory('groupsMentorData', ['$firebase', function ($firebase){
+    var groups='';
+    var allGroups='';
+    var ref = new Firebase(firebaseUrl+'/groups');
+
+    return{
+        getGroupByID: function (schoolID, cb){
+           groups = $firebase(ref.child('schools').child(schoolID)).$asArray();
+           this.getGroupsGeneral(cb);
+        },
+        getGroupsGeneral: function (cb){
+            groups.$loaded(function(data){
+                var general = $firebase(ref.child('general')).$asArray();
+                    general.$loaded(function(grp){
+                        if(data.length > 0){
+                            allGroups = grp.concat(data);
+                            cb(allGroups);
+                        }else{
+                            cb(grp);
+                        }
+                        
+                    });
+            })
         }
     }
-}]);
+     
+}])
+

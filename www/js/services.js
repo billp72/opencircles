@@ -70,13 +70,6 @@ angular.module('mychat.services', ['firebase'])
                             if(err){
                                 returnval = 'there was an error deleting' + err;
                             }else{
-                                //remove groupName property when all questions have been wrapped up
-                                var len = $firebase(Rooms.getRef().child(schoolID).child('questions').child(groupID)).$asArray();
-                                    len.$loaded(function(data){
-                                        if(data.length === 1){
-                                            Rooms.getRef().child(schoolID).child('questions').child(groupID).child('groupName').remove();
-                                        }
-                                });
                                 questionProspect = ref.child(prospectUserID).child('questions').child(prospectQuestionID);
                                 questionProspect.remove(
                                     function (err){
@@ -187,10 +180,7 @@ angular.module('mychat.services', ['firebase'])
                 createdAt: Firebase.ServerValue.TIMESTAMP
             }
         
-            return $firebase(ref.child(schoolID).child('questions').child(groupID)).$asArray().$add(qdata)
-                        .then(function(){
-                            ref.child(schoolID).child('questions').child(groupID).update({'groupName': groupName});
-                        });
+            return $firebase(ref.child(schoolID).child('questions').child(groupID)).$asArray().$add(qdata);
            
         },
          retrieveSingleQuestion: function (schoolID, questionID) {
@@ -271,12 +261,7 @@ angular.module('mychat.services', ['firebase'])
                         if(err){
                             alert('an error occured ' + err);
                         }
-                        var len = $firebase(Rooms.getRef().child(schoolID).child('questions').child(groupID)).$asArray();
-                            len.$loaded(function(data){
-                                if(data.length === 1){
-                                    Rooms.getRef().child(schoolID).child('questions').child(groupID).child('groupName').remove();
-                                }
-                            });
+            
                     }
                 )
         
@@ -511,31 +496,7 @@ angular.module('mychat.services', ['firebase'])
         }
     }
 }])
-/*.service('sendMultiPush', ['$http', '$q', '$ionicLoading',  MultiService]);
-    function MultiService($http, $q, $ionicLoading){
-        function httpService(list, msg){
-            var i=0,
-            var len = list.length;
-            for(i;i<len;i++){
-                $http({
-                    method: 'GET',
-                    url: base_url+'/push',
-                    params: {'message': msg, 'userID': list[i]}
-                })
-                .success(function(data, status, headers, config)
-                {
-                    console.log(status + ' - ' + data);
-                })
-                .error(function(data, status, headers, config)
-                {
-                    console.log(status);
-                });
-            }
-        }
-        return {
-            httpService: httpService
-        }
-    }*/
+
 .service('RequestsService', ['$http', '$q', '$ionicLoading',  RequestsService]);
 
     function RequestsService($http, $q, $ionicLoading){
