@@ -124,8 +124,9 @@ angular.module('mychat.autocomplete', ['firebase'])
     function ($q, $timeout, groupsMentorData, Users) {
         var schools='';
         groupsMentorData.getGroupByID(Users.getIDS('schoolID'), function(data){
+
             schools = data.sort(function(a, b) {
-                console.log('factory: ', a);
+
                 var schoolA = a.groupName.toLowerCase();
                 var schoolB = b.groupName.toLowerCase();
 
@@ -220,7 +221,7 @@ angular.module('mychat.autocomplete', ['firebase'])
             groups.$loaded(function(data){
                 var general = $firebase(ref.child('general')).$asArray();
                     general.$loaded(function(grp){
-                        if(data.length > 0){
+                        if(!!data && data.length > 0){
                             allGroups = grp.concat(data);
                             cb(allGroups);
                         }else{
